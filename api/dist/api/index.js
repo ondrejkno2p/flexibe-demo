@@ -7,8 +7,8 @@ const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 app.listen(3001);
 app.use((req, res, next) => {
-    console.log(req.url);
-    console.log(req.params);
+    // console.log(req.url)
+    // console.log(req.params)
     next();
 });
 const getFaktura = (fakturaFull) => {
@@ -35,13 +35,26 @@ const getFaktura = (fakturaFull) => {
     return faktura;
 };
 app.get('/api', (request, response) => {
-    const start = request.query.start ? request.query.start : "0";
-    const limit = request.query.start ? request.query.limit : "20";
-    const q = request.query.q ? request.query.q : "";
-    // console.log(request.query)
-    fetch('https://demo.flexibee.eu/c/demo/objednavka-prijata.json?detail=full&start=' + start + '&limit=' + limit + '&q=' + q + '&add-row-count=true').then((res) => {
-        return res.json();
-    }).then((body) => {
+    const params = new URLSearchParams();
+    if (request.query.start !== undefined) {
+        params.append("start", String(request.query.start));
+    }
+    else {
+        params.append("start", String(0));
+    }
+    if (request.query.limit !== undefined) {
+        params.append("limit", String(request.query.limit));
+    }
+    else {
+        params.append("limit", String(8));
+    }
+    if (request.query.q !== undefined) {
+        params.append("q", String(request.query.q));
+    }
+    params.append("detail", "full");
+    params.append("add-row-count", "true");
+    const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata.json?' + params.toString();
+    fetch(url).then((res) => { return res.json(); }).then((body) => {
         const faktury = body.winstrom['objednavka-prijata'].map((fakturaFull) => {
             return getFaktura(fakturaFull);
         });
@@ -52,9 +65,8 @@ app.get('/api', (request, response) => {
     });
 });
 app.get('/api/:id', (request, response) => {
-    fetch('https://demo.flexibee.eu/c/demo/objednavka-prijata/' + request.params.id + '.json').then((res) => {
-        return res.json();
-    }).then((body) => {
+    const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata/' + request.params.id + '.json';
+    fetch(url).then((res) => { return res.json(); }).then((body) => {
         const faktura = body.winstrom['objednavka-prijata'].map((fakturaFull) => {
             return getFaktura(fakturaFull);
         });
@@ -65,11 +77,10 @@ app.get('/api/:id', (request, response) => {
     });
 });
 app.get('/api/pdf/:id.pdf', (request, response) => {
-    fetch('https://demo.flexibee.eu/c/demo/objednavka-prijata/' + request.params.id + '.pdf').then((res) => {
-        return res.blob();
-    }).then((body) => {
+    const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata/' + request.params.id + '.pdf';
+    fetch(url).then((res) => { return res.blob(); }).then((body) => {
         body.arrayBuffer().then((buffer) => {
-            response.send(new Buffer(buffer));
+            response.send(buffer);
         });
     }).catch((error) => {
         console.log(error);
