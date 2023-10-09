@@ -80,7 +80,7 @@ app.get('/api/pdf/:id.pdf', (request, response) => {
     const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata/' + request.params.id + '.pdf';
     fetch(url).then((res) => { return res.blob(); }).then((body) => {
         body.arrayBuffer().then((buffer) => {
-            response.send(buffer);
+            response.send(new Buffer(buffer));
         });
     }).catch((error) => {
         console.log(error);
