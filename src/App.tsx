@@ -4,7 +4,7 @@ import { faForwardStep, faForwardFast, faMagnifyingGlass, faBackwardStep, faBack
 import type { Faktura } from './types';
 import Row from './Row';
 function App() {
-  const defPageLen = 10;
+  const defPageLen = 8;
   const defPage = 0;
   const defSearch = '';
   const [getFaktury,setFaktury] = useState<Faktura[]>([]);
@@ -180,7 +180,7 @@ function App() {
             <th className='text-left px-2 py-4 w-[9rem]'>
               Jméno
             </th>
-            <th className='text-left px-2 py-4 w-[7rem]'>
+            <th className='text-left px-2 py-4 w-[8rem]'>
               DIČ
             </th>
             <th className='text-left px-2 py-4 w-[5rem]'>
@@ -189,10 +189,13 @@ function App() {
             <th className='text-left px-2 py-4 w-[9rem]'>
               Doprava
             </th>
+            <th className='text-left px-2 py-4 w-[9rem]'>
+              Forma Úhrady
+            </th>
             <th className='text-left px-2 py-4 w-[12rem]'>
               Položky
             </th>
-            <th className='text-left px-2 py-4 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[5rem]'>
               Stav
             </th>
             <th className='text-center px-2 py-4 w-[4rem]'>

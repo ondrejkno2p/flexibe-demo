@@ -62,30 +62,44 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.uzivatel}
     </td>
-    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      <div className='grid-rows-2'>
-        <div className='relative text-ellipsis overflow-hidden whitespace-nowrap '>
+    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300 tool-tip'>
+      <div className='grid-rows-2 text-ellipsis whitespace-nowrap overflow-hidden' >
+        <div className='text-ellipsis whitespace-nowrap overflow-hidden'>
           {faktura.ulice}<br/>
         </div>
-        <div>
+        <div className='text-ellipsis whitespace-nowrap overflow-hidden'>
           {faktura.mesto}{faktura.psc?', ':''}
           {faktura.psc}
           <br/>
         </div>
-        <div>
+        <div className='text-ellipsis whitespace-nowrap overflow-hidden'>
           {faktura.stat}<br/>
         </div>
       </div>
+      {(faktura.ulice || faktura.mesto || faktura.psc || faktura.stat) && (
+      <span>
+          <div className='grid-rows-2 whitespace-nowrap' >
+          <div className=''>
+            {faktura.ulice}<br/>
+          </div>
+          <div>
+            {faktura.mesto}{faktura.psc?', ':''}
+            {faktura.psc}
+            <br/>
+          </div>
+          <div>
+            {faktura.stat}<br/>
+          </div>
+        </div>
+      </span>)
+      }
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      <div className='grid-rows-2'>
+      {/* <div className='grid-rows-2'> */}
         <div>
           {faktura.sumCelkem} {faktura.mena.split(':')[1]}<br/>
         </div>
-        <div>
-          {faktura.formaUhrady}<br/>
-        </div>
-      </div>
+      {/* </div> */}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.kod}
@@ -94,13 +108,16 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
       {faktura.kontaktJmeno}  
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.dic}
+      {faktura.dic!="null"?faktura.dic:''}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.ic}
+      {faktura.ic!="null"?faktura.ic:''}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.formaDopravy}
+      {faktura.formaDopravy?faktura.formaDopravy.split(':')[1]:''}
+    </td>
+    <td>
+      {faktura.formaUhrady?faktura.formaUhrady.split(':')[1]:''}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300 relative'>
       {polozky(faktura.bezPolozek, faktura.id)}
