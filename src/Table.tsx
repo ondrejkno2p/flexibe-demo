@@ -12,9 +12,40 @@ function Table() {
   const [, setNavigating] = useState(true);
   const [isClient, setClient] = useState(false);
   const [search, setSearch] = useState(defSearch);
-  const [getPageLen, ] = useState(defPageLen);
+  const [getPageLen, setPageLen ] = useState(defPageLen);
   const [input, setInput] = useState('');
   const [rowCount, setRowCount] = useState(0);
+  const updatePage = ({limit,start,q}:{limit?:number, start?:number,  q?:string},callback?:()=>void)=>{
+    const params = new URLSearchParams()
+    if(limit!==undefined){
+        params.append("limit",String(limit))
+    }
+    else{
+        params.append("limit",String(getPageLen))
+    }
+    if(start!==undefined){
+        params.append("start",String(start))
+    }
+    else{
+        params.append("start",String(getPage))
+    }
+    if(q!==undefined && q.length>0) {
+        params.append("q",q)
+    }
+    else if (search.length>0) {
+        params.append("q",search)
+    }
+    console.log(params.toString())
+    const url = '/api?'+params.toString()
+    fetch(url).then((res)=>{return res.json()}).then((body)=>{
+        setFaktury(body.faktury)
+        setRowCount(body.rowCount)
+        if(limit!==undefined) setPageLen(limit)
+        if(start!==undefined) setPage(start)
+        if(q!==undefined) setSearch(q)
+        if(callback) callback()
+      })
+  }
   useEffect(()=>{
     if(!isClient){
       setClient(true);
@@ -23,10 +54,7 @@ function Table() {
   },[isClient])
   useEffect(()=>{
     if(isClient){
-      fetch('/api?start='+defPage+'&limit='+defPageLen+'&q='+defSearch).then((res)=>{return res.json()}).then((body)=>{
-        setFaktury(body.faktury)
-        setRowCount(body.rowCount)
-      })
+      updatePage({start:0})
     }
   },[isClient])
   
@@ -39,14 +67,8 @@ function Table() {
           value={input}
           onKeyUp={(event)=>{
             if (event.key === 'Enter') {
-              setNavigating(true)
-              fetch('/api?start='+(0)+'&limit='+getPageLen+'&q='+input).then((res)=>{return res.json()}).then((body)=>{
-                setSearch(input)
+              updatePage({start:0,q:input},()=>{
                 setInput('')
-                setPage(0)
-                setNavigating(false)
-                setFaktury(body.faktury)
-                setRowCount(body.rowCount)
               })
             }
           }
@@ -59,15 +81,9 @@ function Table() {
           className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10 rounded-l-none'
           disabled={input.length===0}
           onClick={()=>{
-            setNavigating(true)
-            fetch('/api?start='+(0)+'&limit='+getPageLen+'&q='+input).then((res)=>{return res.json()}).then((body)=>{
-              setSearch(input)
-              setInput('')
-              setPage(0)
-              setNavigating(false)
-              setFaktury(body.faktury)
-              setRowCount(body.rowCount)
-            })
+            updatePage({start:0,q:input},()=>{
+                setInput('')
+              })
           }}>
             <FontAwesomeIcon icon={faMagnifyingGlass}/>
           </button>
@@ -78,14 +94,7 @@ function Table() {
               <button
               className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 h-full'
               onClick={()=>{
-                setNavigating(true)
-                fetch('/api?start='+(0)+'&limit='+getPageLen+'&q=').then((res)=>{return res.json()}).then((body)=>{
-                  setSearch('')
-                  setPage(0)
-                  setNavigating(false)
-                  setFaktury(body.faktury)
-                  setRowCount(body.rowCount)
-                })
+                updatePage({start:0,q:''})
               }}>
                 {search}
               </button>
@@ -97,11 +106,7 @@ function Table() {
           className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={getPage===0}
           onClick={()=>{
-            fetch('/api?start='+0+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
-              setPage(0);
-              setFaktury(body.faktury)
-              setRowCount(body.rowCount)
-            })
+            updatePage({start:0})
           }}>
             <FontAwesomeIcon icon={faBackwardFast}/>
           </button>
@@ -109,11 +114,7 @@ function Table() {
           className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={getPage===0}
           onClick={()=>{
-            fetch('/api?start='+Math.max(0,getPage-getPageLen)+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
-              setPage(Math.max(0,getPage-getPageLen));
-              setFaktury(body.faktury)
-              setRowCount(body.rowCount)
-            })
+            updatePage({start:Math.max(0,getPage-getPageLen)})
           }}>
             <FontAwesomeIcon icon={faBackwardStep}/>
           </button>
@@ -121,11 +122,7 @@ function Table() {
           className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={rowCount<=getPage+getPageLen}
           onClick={()=>{
-            fetch('/api?start='+(getPage+getPageLen)+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
-              setPage(getPage+getPageLen);
-              setFaktury(body.faktury)
-              setRowCount(body.rowCount)
-            })
+            updatePage({start:getPage+getPageLen})
           }}>
             <FontAwesomeIcon icon={faForwardStep}/>
           </button>
@@ -134,11 +131,7 @@ function Table() {
           disabled={rowCount<=getPage+getPageLen}
           onClick={()=>{
             const endPage = rowCount>0?Math.floor(rowCount/getPageLen)*getPageLen:0
-            fetch('/api?start='+(endPage)+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
-              setPage(endPage);
-              setFaktury(body.faktury)
-              setRowCount(body.rowCount)
-            })
+            updatePage({start:endPage===rowCount?Math.max(0,endPage-getPageLen):endPage})
           }}>
             <FontAwesomeIcon icon={faForwardFast}/>
           </button>

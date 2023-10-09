@@ -55,7 +55,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
                         return <li className='w-full p-1 border-2 border-solid border-gray-100'
                         key={index}>{polozka.kod?polozka.kod+':':''}{polozka.kod && <br/>}{polozka.nazev}</li>
                     })}
-                    {faktura?.polozky?.length==0 && <li key={0} className='w-full p-1 border-2 border-solid border-gray-100 font-bold'>
+                    {faktura?.polozky?.length===0 && <li key={0} className='w-full p-1 border-2 border-solid border-gray-100 font-bold'>
                         Položky nenalezeny
                       </li>
                     }
