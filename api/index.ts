@@ -11,17 +11,18 @@ app.use((req, res, next) => {
 })
 
 const getFaktura = (fakturaFull:any)=>{
+  const faAdresa = !(fakturaFull.faUlice==="" && fakturaFull.faMesto==="" && fakturaFull.faPsc==="" && fakturaFull.faStat==="");
   const faktura:Faktura={
     id:fakturaFull.id,
     uzivatel:fakturaFull['uzivatel@showAs'],
     kod:fakturaFull.kod,
     kontaktJmeno:fakturaFull.kontaktJmeno,
-    mesto:fakturaFull.faMesto,
-    psc:fakturaFull.faPsc,
+    mesto:faAdresa?fakturaFull.faMesto:fakturaFull.mesto,
+    psc:faAdresa?fakturaFull.faPsc:fakturaFull.psc,
     dic:fakturaFull.dic,
     ic: fakturaFull.ic,
-    ulice: fakturaFull.faUlice,
-    stat:fakturaFull['faStat@showAs'],
+    ulice:faAdresa?fakturaFull.faUlice:fakturaFull.ulice,
+    stat:faAdresa?fakturaFull['faStat@showAs']:fakturaFull['stat@showAs'],
     formaDopravy:fakturaFull['formaDopravy@showAs'],
     sumCelkem:fakturaFull.sumCelkem,
     mena:fakturaFull.mena,
@@ -41,7 +42,6 @@ app.get('/api',(request, response)=>{
     fetch('https://demo.flexibee.eu/c/demo/objednavka-prijata.json?detail=full&start='+start+'&limit='+limit+'&q='+q+'&add-row-count=true').then((res)=>{
         return res.json()
       }).then((body)=>{
-        console.log(body.winstrom['objednavka-prijata']);
         const faktury=body.winstrom['objednavka-prijata'].map((fakturaFull:any)=>{
             return getFaktura(fakturaFull)
         })
@@ -56,7 +56,6 @@ app.get('/api/:id',(request, response)=>{
   fetch('https://demo.flexibee.eu/c/demo/objednavka-prijata/'+request.params.id+'.json').then((res)=>{
       return res.json()
     }).then((body)=>{
-      console.log(body.winstrom['objednavka-prijata'])
       const faktura=body.winstrom['objednavka-prijata'].map((fakturaFull:any)=>{
         return getFaktura(fakturaFull)
       })

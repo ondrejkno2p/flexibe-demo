@@ -9,8 +9,10 @@ function App() {
           FlexiBee Demo
         </div>
       </div>
-      <div className='h-full p-4 flex-grow'>
-        <Table/>
+      <div className='h-full p-4 w-full flex-grow flex justify-center'>
+        <div className=' max-w-[101rem] '>
+          <Table/>
+        </div>
       </div>
       <div className='h-fit border-black border-solid border-t-2 p-2 flex-shrink-0'>
         <div className='text-xl font-bold'>

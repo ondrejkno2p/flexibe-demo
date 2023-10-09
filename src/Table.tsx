@@ -31,7 +31,7 @@ function Table() {
   },[isClient])
   
   return (
-    <div className="w-full h-full max-w-full min-w-fit">
+    <div className="w-full h-full min-w-fit">
       <div className='flex justify-between py-4'> 
         <div className='flex flex-row'>
           <input
