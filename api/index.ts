@@ -23,6 +23,7 @@ const app = express();
 app.listen(3001)
 
 app.use((req, res, next) => {
+  console.log(req.url)
   next()
 })
 
@@ -89,8 +90,6 @@ app.get('/api/:id',(request, response)=>{
           return faktura
       })
       response.setHeader("cache-control",'max-age=3600')
-      response.setHeader('Content-Type', 'json');
-      response.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
       response.json(faktura[0]);
     }).catch((error)=>{
       console.log(error)
