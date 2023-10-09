@@ -63,7 +63,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
       {faktura.uzivatel}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300 tool-tip'>
-      <div className='grid-rows-2 text-ellipsis whitespace-nowrap overflow-hidden' >
+      <div className='grid-rows-3 text-ellipsis whitespace-nowrap overflow-hidden' >
         <div className='text-ellipsis whitespace-nowrap overflow-hidden'>
           {faktura.ulice}<br/>
         </div>
@@ -78,7 +78,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
       </div>
       {(faktura.ulice || faktura.mesto || faktura.psc || faktura.stat) && (
       <span>
-          <div className='grid-rows-2 whitespace-nowrap' >
+          <div className='grid-rows-3 whitespace-nowrap' >
           <div className=''>
             {faktura.ulice}<br/>
           </div>
@@ -104,14 +104,22 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.kod}
     </td>
-    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.kontaktJmeno}  
+    <td className='align-text-top p-1 border-l-2 border-r-2 border-solid border-gray-300 text-ellipsis overflow-hidden tool-tip'>
+      {faktura.kontaktJmeno}
+      {faktura.kontaktJmeno && <span>
+          {faktura.kontaktJmeno}  
+        </span>
+      }
     </td>
-    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.dic!="null"?faktura.dic:''}
-    </td>
-    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.ic!="null"?faktura.ic:''}
+    <td className=' border-l-2 border-r-2 border-solid border-gray-300'>
+      <div className='grid-row-2 h-full'>
+        <div className='border-solid border-b-2 border-gray-400'>
+          {faktura.ic!=="null"?faktura.ic:''}<br/>
+        </div>
+        <div>
+          {faktura.dic!=="null"?faktura.dic:''}<br/>
+        </div>
+      </div>
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.formaDopravy?faktura.formaDopravy.split(':')[1]:''}
