@@ -109,7 +109,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
       {faktura.stavUzivK}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300 text-center'>
-      <a href={'https://demo.flexibee.eu/c/demo/objednavka-prijata/'+faktura.id+'.pdf'}>
+      <a href={'/api/pdf/'+faktura.id+'.pdf'}>
         <FontAwesomeIcon size='2x' icon={faFilePdf}/>
       </a>
     </td>

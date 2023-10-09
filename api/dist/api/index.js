@@ -8,6 +8,7 @@ const app = (0, express_1.default)();
 app.listen(3001);
 app.use((req, res, next) => {
     console.log(req.url);
+    console.log(req.params);
     next();
 });
 const getFaktura = (fakturaFull) => {
@@ -21,7 +22,7 @@ const getFaktura = (fakturaFull) => {
         dic: fakturaFull.dic,
         ic: fakturaFull.ic,
         ulice: fakturaFull.faUlice,
-        stat: fakturaFull.faStat,
+        stat: fakturaFull['faStat@showAs'],
         formaDopravy: fakturaFull['formaDopravy@showAs'],
         sumCelkem: fakturaFull.sumCelkem,
         mena: fakturaFull.mena,
@@ -60,6 +61,17 @@ app.get('/api/:id', (request, response) => {
         });
         response.setHeader("cache-control", 'max-age=3600');
         response.json(faktura[0]);
+    }).catch((error) => {
+        console.log(error);
+    });
+});
+app.get('/api/pdf/:id.pdf', (request, response) => {
+    fetch('https://demo.flexibee.eu/c/demo/objednavka-prijata/' + request.params.id + '.pdf').then((res) => {
+        return res.blob();
+    }).then((body) => {
+        body.arrayBuffer().then((buffer) => {
+            response.send(new Buffer(buffer));
+        });
     }).catch((error) => {
         console.log(error);
     });
