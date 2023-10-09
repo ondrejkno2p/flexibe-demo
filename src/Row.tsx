@@ -24,14 +24,14 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     const polozky = (bezPolozek:string,id:string)=>{
         if(bezPolozek==="true"){
           return <div>
-            <button disabled={true} className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-full h-full' 
+            <button disabled={true} className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-full h-full' 
             >
           Bez položek
         </button> </div> 
         }
         else{
           return <div className='relative w-full h-full block'>
-            <button disabled={detail} className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-full h-full disabled:rounded-b-none' onClick={()=>{
+            <button disabled={detail} className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-full h-full disabled:rounded-b-none' onClick={()=>{
                 if(!faktura.polozky){
                     fetch('/api/'+id).then((res)=>{
                         return res.json()
@@ -66,7 +66,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
         }
       }
     return(
-    <tr key={index} className='border-2 border-solid border-gray-300 odd:bg-blue-100 even:bg-blue-50 hover:bg-blue-200'>
+    <tr key={index} className='border-2 border-solid border-gray-300 odd:bg-gray-100 even:bg-gray-50 hover:bg-gray-200'>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.uzivatel}
     </td>

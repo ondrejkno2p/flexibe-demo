@@ -56,7 +56,7 @@ function Table() {
           }}/>
 
           <button
-          className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-10 h-10 rounded-l-none'
+          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10 rounded-l-none'
           disabled={input.length===0}
           onClick={()=>{
             setNavigating(true)
@@ -76,7 +76,7 @@ function Table() {
             className=''
             >
               <button
-              className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 h-full'
+              className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 h-full'
               onClick={()=>{
                 setNavigating(true)
                 fetch('/api?start='+(0)+'&limit='+getPageLen+'&q=').then((res)=>{return res.json()}).then((body)=>{
@@ -94,7 +94,7 @@ function Table() {
         </div>
         <div className='flex items-center'>
         <button 
-          className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-10 h-10'
+          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={getPage===0}
           onClick={()=>{
             fetch('/api?start='+0+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
@@ -106,7 +106,7 @@ function Table() {
             <FontAwesomeIcon icon={faBackwardFast}/>
           </button>
           <button 
-          className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-10 h-10'
+          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={getPage===0}
           onClick={()=>{
             fetch('/api?start='+Math.max(0,getPage-getPageLen)+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
@@ -118,7 +118,7 @@ function Table() {
             <FontAwesomeIcon icon={faBackwardStep}/>
           </button>
           <button
-          className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-10 h-10'
+          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={rowCount<=getPage+getPageLen}
           onClick={()=>{
             fetch('/api?start='+(getPage+getPageLen)+'&limit='+getPageLen+'&q='+search).then((res)=>{return res.json()}).then((body)=>{
@@ -130,7 +130,7 @@ function Table() {
             <FontAwesomeIcon icon={faForwardStep}/>
           </button>
           <button
-          className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-10 h-10'
+          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
           disabled={rowCount<=getPage+getPageLen}
           onClick={()=>{
             const endPage = rowCount>0?Math.floor(rowCount/getPageLen)*getPageLen:0
