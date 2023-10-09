@@ -165,37 +165,37 @@ function App() {
       <table className='table-fixed w-full'>
         <thead>
           <tr className='text-xl'>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[9rem]'>
               Uživatel
             </th>
-            <th className='text-left p-1 w-full'>
+            <th className='text-left px-2 py-4 w-full'>
               Adresa
             </th>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[9rem]'>
               Částka
             </th>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[12rem]'>
               Kód
             </th>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[9rem]'>
               Jméno
             </th>
-            <th className='text-left p-1 w-[7rem]'>
+            <th className='text-left px-2 py-4 w-[7rem]'>
               DIČ
             </th>
-            <th className='text-left p-1 w-[5rem]'>
+            <th className='text-left px-2 py-4 w-[5rem]'>
               IČ
             </th>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[9rem]'>
               Doprava
             </th>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[12rem]'>
               Položky
             </th>
-            <th className='text-left p-1 w-[9rem]'>
+            <th className='text-left px-2 py-4 w-[9rem]'>
               Stav
             </th>
-            <th className='text-left p-1 w-[3rem]'>
+            <th className='text-center px-2 py-4 w-[4rem]'>
               PDF
             </th>
           </tr>

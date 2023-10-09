@@ -16,4 +16,5 @@ export type Faktura = {
     mena:string,
     stavUzivK:string,
     polozky?:{kod:string,nazev:string}[],
+    formaUhrady:string,
   }

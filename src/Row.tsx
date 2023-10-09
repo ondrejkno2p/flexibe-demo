@@ -22,12 +22,12 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
         setFaktura(DefFaktura)
     },[DefFaktura])
     const polozky = (bezPolozek:string,id:string)=>{
-        if(bezPolozek==="true"){
-          return <div> Bez Položek </div>
+        if(bezPolozek==="true"  || (faktura?.polozky?.length && faktura?.polozky?.length==0)){
+          return <div> Bez Položek {bezPolozek} </div> 
         }
         else{
-          return <div className='relative w-full'>
-            <button className='bg-blue-500' onClick={()=>{
+          return <div className='relative w-full h-full block'>
+            <button disabled={detail} className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-full h-full disabled:rounded-b-none' onClick={()=>{
                 if(!faktura.polozky){
                     fetch('/api/'+id).then((res)=>{
                         return res.json()
@@ -37,20 +37,19 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
                     })
                 }
                 else{
-                    setDetail(true);
+                    setDetail(detail?false:true);
                 }
-
             }}>
-              Položky {bezPolozek}
+              Zobrazit Položky
             </button>
-            {detail && <div
-                className='absolute z-10 bg-white w-full rounded-b-md overflow-scroll max-h-40'
+            {detail && faktura?.polozky?.length && faktura?.polozky?.length>0 && <div
+                className='border-solid border-2 border-black border-t-0 absolute z-10 bg-white w-full rounded-b-md overflow-scroll max-h-40'
                 ref={newRef}
                 >
                 <ol>
                     {faktura?.polozky?.map((polozka,index)=>{
                         return <li className='w-full p-1 border-2 border-solid border-gray-100'
-                        key={index}>{polozka.nazev}</li>
+                        key={index}>{polozka.kod}:<br/>{polozka.nazev}</li>
                     })}
                 </ol>
                 </div>
@@ -66,7 +65,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       <div className='grid-rows-2'>
         <div className='relative text-ellipsis overflow-hidden whitespace-nowrap '>
-          {faktura.ulice}
+          {faktura.ulice}<br/>
         </div>
         <div>
           {faktura.mesto}{faktura.psc?', ':''}
@@ -79,7 +78,14 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
       </div>
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
-      {faktura.sumCelkem} {faktura.mena.split(':')[1]} 
+      <div className='grid-rows-2'>
+        <div>
+          {faktura.sumCelkem} {faktura.mena.split(':')[1]}<br/>
+        </div>
+        <div>
+          {faktura.formaUhrady}<br/>
+        </div>
+      </div>
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.kod}
@@ -96,7 +102,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.formaDopravy}
     </td>
-    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
+    <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300 relative'>
       {polozky(faktura.bezPolozek, faktura.id)}
     </td>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
