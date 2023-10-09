@@ -20,7 +20,7 @@ const getFaktura = (fakturaFull:any)=>{
     dic:fakturaFull.dic,
     ic: fakturaFull.ic,
     ulice: fakturaFull.faUlice,
-    stat:fakturaFull.faStat,
+    stat:fakturaFull['faStat@showAs'],
     formaDopravy:fakturaFull['formaDopravy@showAs'],
     sumCelkem:fakturaFull.sumCelkem,
     mena:fakturaFull.mena,
