@@ -78,7 +78,7 @@ function Table() {
           }}/>
 
           <button
-          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10 rounded-l-none'
+          className='btn-primary w-10 h-10 rounded-l-none'
           disabled={input.length===0}
           onClick={()=>{
             updatePage({start:0,q:input},()=>{
@@ -92,7 +92,7 @@ function Table() {
             className=''
             >
               <button
-              className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 h-full'
+              className='btn-primary h-full'
               onClick={()=>{
                 updatePage({start:0,q:''})
               }}>
@@ -103,7 +103,7 @@ function Table() {
         </div>
         <div className='flex items-center'>
         <button 
-          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
+          className='btn-primary rounded-r-none w-10 h-10'
           disabled={getPage===0}
           onClick={()=>{
             updatePage({start:0})
@@ -111,7 +111,7 @@ function Table() {
             <FontAwesomeIcon icon={faBackwardFast}/>
           </button>
           <button 
-          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
+          className='btn-primary rounded-none w-10 h-10'
           disabled={getPage===0}
           onClick={()=>{
             updatePage({start:Math.max(0,getPage-getPageLen)})
@@ -119,7 +119,7 @@ function Table() {
             <FontAwesomeIcon icon={faBackwardStep}/>
           </button>
           <button
-          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
+          className='btn-primary rounded-none w-10 h-10'
           disabled={rowCount<=getPage+getPageLen}
           onClick={()=>{
             updatePage({start:getPage+getPageLen})
@@ -127,11 +127,11 @@ function Table() {
             <FontAwesomeIcon icon={faForwardStep}/>
           </button>
           <button
-          className='active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100 w-10 h-10'
+          className='btn-primary rounded-l-none w-10 h-10'
           disabled={rowCount<=getPage+getPageLen}
           onClick={()=>{
             const endPage = rowCount>0?Math.floor(rowCount/getPageLen)*getPageLen:0
-            updatePage({start:endPage===rowCount?Math.max(0,endPage-getPageLen):endPage})
+            updatePage({start:endPage==rowCount?Math.max(0,endPage-getPageLen):endPage})
           }}>
             <FontAwesomeIcon icon={faForwardFast}/>
           </button>
