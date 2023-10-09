@@ -22,7 +22,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
         setFaktura(DefFaktura)
     },[DefFaktura])
     const polozky = (bezPolozek:string,id:string)=>{
-        if(bezPolozek==="true"  || (faktura?.polozky?.length && faktura?.polozky?.length==0)){
+        if(bezPolozek==="true"){
           return <div> Bez Položek {bezPolozek} </div> 
         }
         else{
