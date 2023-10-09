@@ -45,7 +45,7 @@ app.get('/api',(request, response)=>{
         const faktury=body.winstrom['objednavka-prijata'].map((fakturaFull:any)=>{
             return getFaktura(fakturaFull)
         })
-        response.setHeader("cache-control",'max-age=3600')
+        response.setHeader("cache-control",'max-age=60')
         response.json({faktury:faktury,rowCount:body.winstrom['@rowCount']});
       }).catch((error)=>{
         console.log(error)
@@ -59,7 +59,7 @@ app.get('/api/:id',(request, response)=>{
       const faktura=body.winstrom['objednavka-prijata'].map((fakturaFull:any)=>{
         return getFaktura(fakturaFull)
       })
-      response.setHeader("cache-control",'max-age=3600')
+      response.setHeader("cache-control",'max-age=60')
       response.json(faktura[0]);
     }).catch((error)=>{
       console.log(error)

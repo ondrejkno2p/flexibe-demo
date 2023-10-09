@@ -173,7 +173,7 @@ function Table() {
             <th className='text-left px-2 py-4 w-[9rem]'>
               Částka
             </th>
-            <th className='text-left px-2 py-4 w-[12rem]'>
+            <th className='text-left px-2 py-4 w-[11rem]'>
               Kód
             </th>
             <th className='text-left px-2 py-4 w-[9rem]'>

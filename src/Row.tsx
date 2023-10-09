@@ -23,7 +23,11 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     },[DefFaktura])
     const polozky = (bezPolozek:string,id:string)=>{
         if(bezPolozek==="true"){
-          return <div> Bez Položek {bezPolozek} </div> 
+          return <div>
+            <button disabled={true} className='active:bg-blue-200 bg-blue-400 rounded-xl p-1 border-solid border-2 border-black hover:bg-blue-300 disabled:bg-blue-50 w-full h-full' 
+            >
+          Bez položek
+        </button> </div> 
         }
         else{
           return <div className='relative w-full h-full block'>
@@ -42,15 +46,19 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
             }}>
               Zobrazit Položky
             </button>
-            {detail && faktura?.polozky?.length && faktura?.polozky?.length>0 && <div
-                className='border-solid border-2 border-black border-t-0 absolute z-10 bg-white w-full rounded-b-md overflow-scroll max-h-40'
+            {detail && <div
+                className='border-solid border-2 border-black border-t-0 absolute z-10 bg-white min-w-fit w-full rounded-b-md overflow-scroll max-h-40'
                 ref={newRef}
                 >
                 <ol>
                     {faktura?.polozky?.map((polozka,index)=>{
                         return <li className='w-full p-1 border-2 border-solid border-gray-100'
-                        key={index}>{polozka.kod}:<br/>{polozka.nazev}</li>
+                        key={index}>{polozka.kod?polozka.kod+':':''}{polozka.kod && <br/>}{polozka.nazev}</li>
                     })}
+                    {faktura?.polozky?.length==0 && <li key={0} className='w-full p-1 border-2 border-solid border-gray-100 font-bold'>
+                        Položky nenalezeny
+                      </li>
+                    }
                 </ol>
                 </div>
             }
@@ -104,9 +112,9 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.kod}
     </td>
-    <td className='align-text-top p-1 border-l-2 border-r-2 border-solid border-gray-300 text-ellipsis overflow-hidden tool-tip'>
+    <td className='align-text-top p-1 border-l-2 border-r-2 border-solid border-gray-300 text-ellipsis overflow-hidden tool-tip whitespace-nowrap'>
       {faktura.kontaktJmeno}
-      {faktura.kontaktJmeno && <span>
+      {faktura.kontaktJmeno && <span className=''>
           {faktura.kontaktJmeno}  
         </span>
       }
