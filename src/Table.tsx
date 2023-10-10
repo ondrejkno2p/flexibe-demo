@@ -138,7 +138,7 @@ function Table() {
             <FontAwesomeIcon icon={faForwardFast}/>
           </button>
           <div className='flex'>
-            <div className='grid grid-cols-[3rem,1rem,3rem,4rem] font-semibold'>
+            <div className='grid grid-cols-[2rem,1rem,2rem,3rem] font-semibold'>
               <div className='text-center'>
                 {getPage}
               </div>
