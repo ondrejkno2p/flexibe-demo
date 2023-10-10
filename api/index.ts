@@ -28,7 +28,7 @@ const getFaktura = (fakturaFull:any)=>{
     mena:fakturaFull.mena,
     stavUzivK:fakturaFull['stavUzivK@showAs'],
     bezPolozek:fakturaFull.bezPolozek,
-    polozky:fakturaFull.polozkyObchDokladu?fakturaFull.polozkyObchDokladu.map((polozka:any)=>{return {nazev:polozka.nazev,kod:polozka.kod}}):undefined,
+    polozky:fakturaFull.polozkyObchDokladu?fakturaFull.polozkyObchDokladu.map((polozka:any)=>{return {id:polozka.id,nazev:polozka.nazev,kod:polozka.kod}}):undefined,
     formaUhrady:fakturaFull['formaUhradyCis@showAs']
   }
   return faktura

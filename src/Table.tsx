@@ -32,7 +32,7 @@ function Table() {
     if(q!==undefined && q.length>0) {
         params.append("q",q)
     }
-    else if (search.length>0) {
+    else if (q===undefined && search.length>0) {
         params.append("q",search)
     }
     console.log(params.toString())
@@ -61,9 +61,9 @@ function Table() {
   return (
     <div className="w-full h-full min-w-fit">
       <div className='flex justify-between py-4'> 
-        <div className='flex flex-row'>
+        <div className='flex flex-row group justify-around w-fit'>
           <input
-          className='border-black border-solid border-2 border-r-0 rounded-xl p-1 rounded-r-none'
+          className='w-60 border-gray-600 bg-gray-100 hover:bg-gray-50 group-hover:bg-gray-50 focus:outline-none hover:border-gray-600 focus:border-black border-solid border-2 rounded-xl p-1 px-2 rounded-r-none'
           value={input}
           onKeyUp={(event)=>{
             if (event.key === 'Enter') {
@@ -79,20 +79,22 @@ function Table() {
 
           <button
           className='btn-primary w-10 h-10 rounded-l-none'
-          disabled={input.length===0}
+          disabled={false}
           onClick={()=>{
-            updatePage({start:0,q:input},()=>{
-                setInput('')
-              })
+            if(input.length>0){
+                updatePage({start:0,q:input},()=>{
+                    setInput('')
+                })
+            }
           }}>
             <FontAwesomeIcon icon={faMagnifyingGlass}/>
           </button>
           {search.length>0 &&
             <div
-            className=''
+            className='px-2'
             >
               <button
-              className='btn-primary h-full'
+              className='btn-primary h-full px-2 hover:px-[6px] min-w-[6rem] text-center'
               onClick={()=>{
                 updatePage({start:0,q:''})
               }}>
@@ -136,7 +138,7 @@ function Table() {
             <FontAwesomeIcon icon={faForwardFast}/>
           </button>
           <div className='flex'>
-            <div className='grid grid-cols-[3rem,1rem,3rem,4rem]'>
+            <div className='grid grid-cols-[3rem,1rem,3rem,4rem] font-semibold'>
               <div className='text-center'>
                 {getPage}
               </div>
@@ -156,7 +158,7 @@ function Table() {
       <div className='border-solid border-2 border-gray-300 rounded-md p-0 rounded-b-none'>
       <table className='table-fixed w-full'>
         <thead>
-          <tr className='text-xl'>
+          <tr key={"0"} className='text-xl'>
             <th className='text-left px-2 py-4 w-[9rem]'>
               Uživatel
             </th>
@@ -195,7 +197,7 @@ function Table() {
         <tbody className=''>
         {getFaktury.map((faktura,index)=>{
           return (
-            <Row DefFaktura={faktura} index={index}/>
+            <Row key={index} DefFaktura={faktura}/>
           )
         })}
         </tbody>

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react';
 
-function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
+function Row({DefFaktura}:{DefFaktura:Faktura}){
     const newRef = useRef<any>(null);
     useEffect(() => {
         document.addEventListener("mousedown", handleOutsideClick);
@@ -24,14 +24,14 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
     const polozky = (bezPolozek:string,id:string)=>{
         if(bezPolozek==="true"){
           return <div>
-            <button disabled={true} className='btn-primary w-full h-full' 
+            <button disabled={true} className='font-bold btn-primary w-full h-full' 
             >
           Bez položek
         </button> </div> 
         }
         else{
           return <div className='relative w-full h-full block'>
-            <button disabled={detail} className='btn-primary w-full h-full disabled:rounded-b-none' onClick={()=>{
+            <button disabled={detail} className='font-bold btn-primary w-full h-full disabled:rounded-b-none' onClick={()=>{
                 if(!faktura.polozky){
                     fetch('/api/'+id).then((res)=>{
                         return res.json()
@@ -53,9 +53,9 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
                 <ol>
                     {faktura?.polozky?.map((polozka,index)=>{
                         return <li className='w-full p-1 border-2 border-solid border-gray-100'
-                        key={index}>{polozka.kod?polozka.kod+':':''}{polozka.kod && <br/>}{polozka.nazev}</li>
+                        key={polozka.id+faktura.id}>{polozka.kod?polozka.kod+':':''}{polozka.kod && <br/>}{polozka.nazev}</li>
                     })}
-                    {faktura?.polozky?.length===0 && <li key={0} className='w-full p-1 border-2 border-solid border-gray-100 font-bold'>
+                    {faktura?.polozky?.length===0 && <li key={faktura.id} className='w-full p-1 border-2 border-solid border-gray-100 font-bold'>
                         Položky nenalezeny
                       </li>
                     }
@@ -66,7 +66,7 @@ function Row({DefFaktura, index}:{DefFaktura:Faktura, index:number}){
         }
       }
     return(
-    <tr key={index} className='border-2 border-solid border-gray-300 odd:bg-gray-100 even:bg-gray-50 hover:bg-gray-200'>
+    <tr key={faktura.id} className='border-2 border-solid border-gray-300 odd:bg-gray-100 even:bg-gray-50 hover:bg-gray-200'>
     <td className='p-1 border-l-2 border-r-2 border-solid border-gray-300'>
       {faktura.uzivatel}
     </td>

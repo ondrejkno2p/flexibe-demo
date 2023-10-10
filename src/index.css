@@ -21,7 +21,7 @@
   position: absolute;
   border: solid black 2px;
   top:-2px;
-  left:-2px;
+  left:-6px;
   padding: 0.25rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -49,6 +49,6 @@ code {
 
 @layer components {
   .btn-primary {
-    @apply active:bg-primary-300 bg-primary-500 rounded-xl p-1 border-solid border-2 border-black hover:bg-primary-400 disabled:bg-primary-100  
+    @apply   bg-primary-500 rounded-xl p-1 border-solid border-2 enabled:active:bg-primary-600 enabled:active:border-primary-600 border-primary-500 disabled:opacity-70 enabled:hover:border-primary-600
   }
 }

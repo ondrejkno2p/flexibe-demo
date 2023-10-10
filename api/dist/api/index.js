@@ -29,7 +29,7 @@ const getFaktura = (fakturaFull) => {
         mena: fakturaFull.mena,
         stavUzivK: fakturaFull['stavUzivK@showAs'],
         bezPolozek: fakturaFull.bezPolozek,
-        polozky: fakturaFull.polozkyObchDokladu ? fakturaFull.polozkyObchDokladu.map((polozka) => { return { nazev: polozka.nazev, kod: polozka.kod }; }) : undefined,
+        polozky: fakturaFull.polozkyObchDokladu ? fakturaFull.polozkyObchDokladu.map((polozka) => { return { id: polozka.id, nazev: polozka.nazev, kod: polozka.kod }; }) : undefined,
         formaUhrady: fakturaFull['formaUhradyCis@showAs']
     };
     return faktura;

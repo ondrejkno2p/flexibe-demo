@@ -15,6 +15,6 @@ export type Faktura = {
     sumCelkem:string,
     mena:string,
     stavUzivK:string,
-    polozky?:{kod:string,nazev:string}[],
+    polozky?:{kod:string,nazev:string,id:string}[],
     formaUhrady:string,
   }
