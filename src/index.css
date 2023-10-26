@@ -5,7 +5,7 @@
 .tool-tip {
   padding: 0.25rem;
   position: relative;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .tool-tip:hover {
@@ -20,8 +20,8 @@
   display: block;
   position: absolute;
   border: solid black 2px;
-  top:-2px;
-  left:-6px;
+  top: -2px;
+  left: -6px;
   padding: 0.25rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -35,20 +35,20 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 @layer components {
   .btn-primary {
-    @apply   bg-primary-500 rounded-xl p-1 border-solid border-2 enabled:active:bg-primary-600 enabled:active:border-primary-600 border-primary-500 disabled:opacity-70 enabled:hover:border-primary-600
+    @apply bg-primary-500 rounded-xl p-1 border-solid border-2 enabled:active:bg-primary-600 enabled:active:border-primary-600 border-primary-500 disabled:opacity-70 enabled:hover:border-primary-600;
   }
 }
