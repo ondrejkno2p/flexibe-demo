@@ -22,7 +22,7 @@ function Row({ DefFaktura }: { DefFaktura: Faktura }) {
     setFaktura(DefFaktura);
   }, [DefFaktura]);
   const polozky = (bezPolozek: string, id: string) => {
-    if (bezPolozek === "true") {
+    if (bezPolozek === "true" || !faktura.polozky || faktura.polozky.length===0 ) {
       return (
         <div>
           <button
@@ -179,6 +179,8 @@ function Row({ DefFaktura }: { DefFaktura: Faktura }) {
           <FontAwesomeIcon size="2x" icon={faFilePdf} />
         </a>
       </td>
+      {detail && <div className="h-80">
+        </div>}
     </tr>
   );
 }

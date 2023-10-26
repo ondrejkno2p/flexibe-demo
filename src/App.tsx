@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
-import Table from "./Table";
+import Body from "./Body";
 function App() {
   return (
     <div className="flex flex-col h-full min-h-screen">
@@ -8,8 +8,8 @@ function App() {
         <div className="text-3xl p-4 font-bold">FlexiBee Demo</div>
       </div>
       <div className="h-full p-4 w-full flex-grow flex justify-center">
-        <div className=" max-w-[101rem] ">
-          <Table />
+        <div className="">
+          <Body />
         </div>
       </div>
       <div className="h-fit border-black border-solid border-t-2 p-2 flex-shrink-0">
