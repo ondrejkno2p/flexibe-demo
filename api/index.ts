@@ -79,14 +79,15 @@ const search = [
   "ulice",
   "faUlice",
   "stavUzivK",
-  // "mena.kod",
-  // "(stat is not empty) or stat.kod",
-  // "faStat.nazev",
-  // "uzivatel.kod",
-  // "formaUhradyCis.kod",
-  // "formaUhradyCis.nazev",
-  // "formaDopravy.kod",
-  // "formaDopravy.nazev",
+  "mena.kod",
+  "(stat is not empty) or stat.kod",
+  "faStat.nazev",
+  "uzivatel.kod",
+  "formaUhradyCis.kod",
+  "formaUhradyCis.nazev",
+  "formaDopravy.kod",
+  "formaDopravy.nazev",
+  "sumCelkem",
 ];
 
 const filter = (q: string) => {
@@ -116,19 +117,19 @@ app.get("/api", (request, response) => {
   const url =
     request.query.q !== undefined
       ? "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
-        encodeURI("(" + filter(request.query.q as string) + ")") +
+        request.query.q +
         ".json?" +
         params.toString()
       : "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
         params.toString();
-  // console.log(url);
+  console.log(url);
   fetch(url)
     .then((res) => {
       // console.log(res)
       return res.json();
     })
     .then((body) => {
-      // console.log(body)
+      console.log(body);
       const faktury = body.winstrom["objednavka-prijata"].map(
         (fakturaFull: any) => {
           return getFaktura(fakturaFull);
