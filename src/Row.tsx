@@ -1,186 +1,143 @@
 import type { Faktura } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-function Row({ DefFaktura }: { DefFaktura: Faktura }) {
-  const newRef = useRef<any>(null);
-  useEffect(() => {
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, []);
-  const handleOutsideClick = (event: any) => {
-    if (newRef.current && !newRef.current.contains(event.target)) {
-      setDetail(false);
-    }
-  };
-  const [faktura, setFaktura] = useState(DefFaktura);
-  const [detail, setDetail] = useState(false);
-  useEffect(() => {
-    setFaktura(DefFaktura);
-  }, [DefFaktura]);
-  const polozky = (bezPolozek: string, id: string) => {
-    if (bezPolozek === "true" || !faktura.polozky || faktura.polozky.length===0 ) {
-      return (
-        <div>
-          <button
-            disabled={true}
-            className="font-bold btn-primary w-full h-full"
-          >
-            Bez položek
-          </button>{" "}
-        </div>
-      );
-    } else {
-      return (
-        <div className="relative w-full h-full block">
-          <button
-            disabled={detail}
-            className="font-bold btn-primary w-full h-full disabled:rounded-b-none"
-            onClick={() => {
-              if (!faktura.polozky) {
-                fetch("/api/" + id)
-                  .then((res) => {
-                    return res.json();
-                  })
-                  .then((body: any) => {
-                    setDetail(true);
-                    setFaktura(body);
-                  });
-              } else {
-                setDetail(detail ? false : true);
-              }
-            }}
-          >
-            Zobrazit Položky
-          </button>
-          {detail && (
-            <div
-              className="border-solid border-2 border-black border-t-0 absolute z-10 bg-white min-w-fit w-full rounded-b-md overflow-scroll max-h-40"
-              ref={newRef}
-            >
-              <ol>
-                {faktura?.polozky?.map((polozka, index) => {
-                  return (
-                    <li
-                      className="w-full p-1 border-2 border-solid border-gray-100"
-                      key={polozka.id + faktura.id}
-                    >
-                      {polozka.kod ? polozka.kod + ":" : ""}
-                      {polozka.kod && <br />}
-                      {polozka.nazev}
-                    </li>
-                  );
-                })}
-                {faktura?.polozky?.length === 0 && (
-                  <li
-                    key={faktura.id}
-                    className="w-full p-1 border-2 border-solid border-gray-100 font-bold"
-                  >
-                    Položky nenalezeny
-                  </li>
-                )}
-              </ol>
-            </div>
-          )}
-        </div>
-      );
-    }
-  };
+function Row({ faktura }: { faktura: Faktura }) {
   return (
     <tr
       key={faktura.id}
-      className="border-2 border-solid border-gray-300 odd:bg-gray-100 even:bg-gray-50 hover:bg-gray-200"
+      className="border-2 border-solid border-gray-300 odd:bg-gray-100 even:bg-gray-50 hover:bg-white"
     >
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300">
-        {faktura.uzivatel}
+      <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
+        <table className="w-full">
+          <caption className="text-left">
+            <a
+              href={"/api/pdf/" + faktura.id + ".pdf"}
+              className="text-xl font-bold"
+            >
+              {faktura.kod} <FontAwesomeIcon icon={faFilePdf} />
+            </a>
+          </caption>
+          <tr>
+            <td className=" align-top font-bold">Stav:</td>
+            <td>
+              {faktura.stavUzivK}
+              <br />
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Uživatel:</td>
+            <td>{faktura.uzivatel}</td>
+          </tr>
+        </table>
+        <div className="align-text-bottom h-full"></div>
       </td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300 tool-tip">
-        <div className="grid-rows-3 text-ellipsis whitespace-nowrap overflow-hidden">
-          <div className="text-ellipsis whitespace-nowrap overflow-hidden">
-            {faktura.ulice}
-            <br />
-          </div>
-          <div className="text-ellipsis whitespace-nowrap overflow-hidden">
-            {faktura.mesto}
-            {faktura.psc ? ", " : ""}
-            {faktura.psc}
-            <br />
-          </div>
-          <div className="text-ellipsis whitespace-nowrap overflow-hidden">
-            {faktura.stat}
-            <br />
-          </div>
-        </div>
-        {(faktura.ulice || faktura.mesto || faktura.psc || faktura.stat) && (
-          <span>
-            <div className="grid-rows-3 whitespace-nowrap">
-              <div className="">
-                {faktura.ulice}
-                <br />
-              </div>
-              <div>
-                {faktura.mesto}
-                {faktura.psc ? ", " : ""}
-                {faktura.psc}
-                <br />
-              </div>
-              <div>
-                {faktura.stat}
-                <br />
-              </div>
-            </div>
-          </span>
+      <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
+        <table className="">
+          <tr>
+            <td className=" align-top font-bold">Jméno:</td>
+            <td>
+              {faktura.kontaktJmeno}
+              <br />
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Ulice:</td>
+            <td>
+              {faktura.ulice}
+              <br />
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Město:</td>
+            <td>
+              {faktura.mesto}
+              <br />
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">PSČ:</td>
+            <td>
+              {faktura.psc}
+              <br />
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Stát:</td>
+            <td>
+              {faktura.stat}
+              <br />
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
+        <table>
+          <tr>
+            <td className=" align-top font-bold">IČ:</td>
+            <td>{faktura.ic}</td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">DIČ:</td>
+            <td>{faktura.dic}</td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Forma Dopravy:</td>
+            <td>
+              {faktura.formaDopravy ? faktura.formaDopravy.split(":")[1] : ""}
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Forma Úhrady:</td>
+            <td>
+              {faktura.formaUhrady ? faktura.formaUhrady.split(":")[1] : ""}
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Celková suma:</td>
+            <td>
+              {faktura.sumCelkem} {faktura.mena.split(":")[1]}
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none overflow-xs">
+        {(!faktura.polozky || faktura.polozky.length === 0) && (
+          <p className="text-left w-fit font-bold text-red-500 text-xl">
+            Bez položek
+          </p>
         )}
+
+        <ol className="w-full">
+          {faktura.polozky &&
+            faktura.polozky.map((polozka, index) => {
+              return (
+                <li
+                  key={index}
+                  className="odd:bg-gray-200 even:bg-gray-100 p-1 rounded-sm"
+                >
+                  <table>
+                    <tr>
+                      <td className="font-bold align-top ">
+                        {(polozka.kod && <p>{polozka.kod}: </p>) || (
+                          <p className="text-red-500">Bez Kódu:</p>
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        {(polozka.nazev && <p>{polozka.nazev}</p>) || (
+                          <p className="text-red-500">Bez názvu</p>
+                        )}
+                      </td>
+                    </tr>
+                  </table>
+                </li>
+              );
+            })}
+        </ol>
       </td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300">
-        {/* <div className='grid-rows-2'> */}
-        <div>
-          {faktura.sumCelkem} {faktura.mena.split(":")[1]}
-          <br />
-        </div>
-        {/* </div> */}
-      </td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300">
-        {faktura.kod}
-      </td>
-      <td className="align-text-top p-1 border-l-2 border-r-2 border-solid border-gray-300 text-ellipsis overflow-hidden tool-tip whitespace-nowrap">
-        {faktura.kontaktJmeno}
-        {faktura.kontaktJmeno && (
-          <span className="">{faktura.kontaktJmeno}</span>
-        )}
-      </td>
-      <td className=" border-l-2 border-r-2 border-solid border-gray-300">
-        <div className="grid-row-2 h-full">
-          <div className="border-solid border-b-2 border-gray-400">
-            {faktura.ic !== "null" ? faktura.ic : ""}
-            <br />
-          </div>
-          <div>
-            {faktura.dic !== "null" ? faktura.dic : ""}
-            <br />
-          </div>
-        </div>
-      </td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300">
-        {faktura.formaDopravy ? faktura.formaDopravy.split(":")[1] : ""}
-      </td>
-      <td>{faktura.formaUhrady ? faktura.formaUhrady.split(":")[1] : ""}</td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300 relative">
-        {polozky(faktura.bezPolozek, faktura.id)}
-      </td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300">
-        {faktura.stavUzivK}
-      </td>
-      <td className="p-1 border-l-2 border-r-2 border-solid border-gray-300 text-center">
-        <a href={"/api/pdf/" + faktura.id + ".pdf"}>
-          <FontAwesomeIcon size="2x" icon={faFilePdf} />
-        </a>
-      </td>
-      {detail && <div className="h-80">
-        </div>}
     </tr>
   );
 }

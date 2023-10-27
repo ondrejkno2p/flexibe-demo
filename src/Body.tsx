@@ -73,7 +73,7 @@ function Body() {
         getParams={getParams}
         rowCount={rowCount}
       />
-      <div className="relative">
+      <div className="relative w-full">
         {getNavigating && (
           <div className="absolute block w-full bg-white z-50 opacity-40 top-0  bottom-0"></div>
         )}

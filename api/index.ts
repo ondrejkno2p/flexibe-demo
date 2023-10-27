@@ -64,7 +64,7 @@ const detail = [
   "stavUzivK",
   "bezPolozek",
   "formaUhrady",
-  "polozkyObchDokladu(nazev,id,kod)"
+  "polozkyObchDokladu(nazev,id,kod)",
 ];
 
 app.get("/api", (request, response) => {
@@ -83,7 +83,7 @@ app.get("/api", (request, response) => {
     params.append("q", String(request.query.q));
   }
   params.append("add-row-count", "true");
-  params.append("detail", "custom:"+detail.toString());
+  params.append("detail", "custom:" + detail.toString());
   const url =
     "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
     params.toString();
