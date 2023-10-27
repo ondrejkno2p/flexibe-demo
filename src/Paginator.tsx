@@ -5,7 +5,6 @@ import {
   faForwardFast,
   faForwardStep,
   faMagnifyingGlass,
-  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import LabelPicker from "./LabelPicker";
@@ -41,7 +40,7 @@ function Paginator({
       <div className="flex flex-row group justify-around w-fit">
         <LabelPicker label={label} setLabel={setLabel} />
         <input
-          className="w-60 border-gray-600 bg-gray-100 hover:bg-gray-50 group-hover:bg-gray-50 focus:outline-none hover:border-gray-600 focus:border-black border-solid border-2 p-1 px-2 rounded-none disabled:bg-gray-200 disabled:hover:!bg-gray-200 disabled:group-hover:!bg-gray-200"
+          className="w-full border-gray-600 bg-gray-100 hover:bg-gray-50 group-hover:bg-gray-50 focus:outline-none hover:border-gray-600 focus:border-black border-solid border-2 p-1 px-2 rounded-none disabled:bg-gray-200 disabled:hover:!bg-gray-200 disabled:group-hover:!bg-gray-200"
           value={input}
           disabled={!label}
           onKeyUp={(event) => {
@@ -70,19 +69,23 @@ function Paginator({
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
-        {getParams.q && (
+        {(getParams.q && (
           <button
-            className="btn-primary mx-2"
+            className="btn-primary mx-2 w-64 whitespace-nowrap"
             onClick={() => {
               setLabel(null);
               setInput("");
               updatePage({ start: 0, q: "" }, () => {
-                // setInput("");
+                setInput("");
               });
             }}
           >
-            Vymazat Filtr
+            Zrušit Filtr
           </button>
+        )) || (
+          <div className="mx-2 w-64">
+            <br />
+          </div>
         )}
       </div>
       <div className="flex items-center">

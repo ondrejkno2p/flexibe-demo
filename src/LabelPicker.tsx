@@ -5,6 +5,7 @@ import { faCaretDown, faCaretUp } from "@fortawesome/free-solid-svg-icons";
 const search = [
   { value: "(kod like similar '%')", name: "Kód" },
   { value: "(kontaktJmeno like similar '%')", name: "Jméno" },
+  { value: "(ic like similar '%')", name: "IČO" },
   { value: "(dic like similar '%')", name: "DIČ" },
   {
     value: "(mesto like similar '%' or faMesto like similar '%')",

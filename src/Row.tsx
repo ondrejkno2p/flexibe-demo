@@ -1,7 +1,6 @@
 import type { Faktura } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
 
 function Row({ faktura }: { faktura: Faktura }) {
   return (
@@ -22,7 +21,7 @@ function Row({ faktura }: { faktura: Faktura }) {
           <tbody>
             <tr>
               <td className=" align-top font-bold">Stav:</td>
-              <td>
+              <td className="w-full">
                 {faktura.stavUzivK}
                 <br />
               </td>
@@ -32,13 +31,17 @@ function Row({ faktura }: { faktura: Faktura }) {
               <td>{faktura.uzivatel}</td>
             </tr>
             <tr>
-              <td className=" align-top font-bold">Forma Dopravy:</td>
+              <td className=" align-top font-bold whitespace-nowrap">
+                Forma Dopravy:
+              </td>
               <td>
                 {faktura.formaDopravy ? faktura.formaDopravy.split(":")[1] : ""}
               </td>
             </tr>
             <tr>
-              <td className=" align-top font-bold">Forma Úhrady:</td>
+              <td className=" align-top font-bold whitespace-nowrap">
+                Forma Úhrady:
+              </td>
               <td>
                 {faktura.formaUhrady ? faktura.formaUhrady.split(":")[1] : ""}
               </td>

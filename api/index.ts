@@ -5,8 +5,6 @@ const app = express();
 app.listen(3001);
 
 app.use((req, res, next) => {
-  // console.log(req.url)
-  // console.log(req.params)
   next();
 });
 
@@ -67,34 +65,6 @@ const detail = [
   "polozkyObchDokladu(nazev,id,kod)",
 ];
 
-const search = [
-  "kod",
-  "kontaktJmeno",
-  "dic",
-  "ic",
-  "mesto",
-  "faMesto",
-  "psc",
-  "faPsc",
-  "ulice",
-  "faUlice",
-  "stavUzivK",
-  "mena.kod",
-  "(stat is not empty) or stat.kod",
-  "faStat.nazev",
-  "uzivatel.kod",
-  "formaUhradyCis.kod",
-  "formaUhradyCis.nazev",
-  "formaDopravy.kod",
-  "formaDopravy.nazev",
-  "sumCelkem",
-];
-
-const filter = (q: string) => {
-  const s = search.join(" like similar '" + q + "') or (");
-  return "(" + s + " like similar '" + q + "')";
-};
-
 app.get("/api", (request, response) => {
   const params = new URLSearchParams();
   if (request.query.start !== undefined) {
@@ -107,10 +77,6 @@ app.get("/api", (request, response) => {
   } else {
     params.append("limit", String(8));
   }
-  if (request.query.q !== undefined) {
-    // params.append("q", String(request.query.q));
-    // console.log(filter(request.query.q as string))
-  }
   params.append("add-row-count", "true");
   params.append("detail", "custom:" + detail.toString());
 
@@ -122,14 +88,11 @@ app.get("/api", (request, response) => {
         params.toString()
       : "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
         params.toString();
-  console.log(url);
   fetch(url)
     .then((res) => {
-      // console.log(res)
       return res.json();
     })
     .then((body) => {
-      console.log(body);
       const faktury = body.winstrom["objednavka-prijata"].map(
         (fakturaFull: any) => {
           return getFaktura(fakturaFull);
