@@ -75,7 +75,7 @@ function Row({ faktura }: { faktura: Faktura }) {
       <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
         <table>
           <tr>
-            <td className=" align-top font-bold">IČ:</td>
+            <td className=" align-top font-bold">IČO:</td>
             <td>{faktura.ic}</td>
           </tr>
           <tr>

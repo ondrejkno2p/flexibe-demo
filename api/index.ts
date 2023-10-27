@@ -63,7 +63,7 @@ const detail = [
   "mena",
   "stavUzivK",
   "bezPolozek",
-  "formaUhrady",
+  "formaUhradyCis",
   "polozkyObchDokladu(nazev,id,kod)",
 ];
 

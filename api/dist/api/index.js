@@ -65,7 +65,7 @@ const detail = [
   "mena",
   "stavUzivK",
   "bezPolozek",
-  "formaUhrady",
+  "formaUhradyCis",
   "polozkyObchDokladu(nazev,id,kod)",
 ];
 app.get("/api", (request, response) => {
