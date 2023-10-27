@@ -30,6 +30,24 @@ function Row({ faktura }: { faktura: Faktura }) {
             <td className=" align-top font-bold">Uživatel:</td>
             <td>{faktura.uzivatel}</td>
           </tr>
+          <tr>
+            <td className=" align-top font-bold">Forma Dopravy:</td>
+            <td>
+              {faktura.formaDopravy ? faktura.formaDopravy.split(":")[1] : ""}
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Forma Úhrady:</td>
+            <td>
+              {faktura.formaUhrady ? faktura.formaUhrady.split(":")[1] : ""}
+            </td>
+          </tr>
+          <tr>
+            <td className=" align-top font-bold">Celková suma:</td>
+            <td>
+              {faktura.sumCelkem} {faktura.mena.split(":")[1]}
+            </td>
+          </tr>
         </table>
         <div className="align-text-bottom h-full"></div>
       </td>
@@ -70,10 +88,6 @@ function Row({ faktura }: { faktura: Faktura }) {
               <br />
             </td>
           </tr>
-        </table>
-      </td>
-      <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
-        <table>
           <tr>
             <td className=" align-top font-bold">IČO:</td>
             <td>{faktura.ic}</td>
@@ -81,24 +95,6 @@ function Row({ faktura }: { faktura: Faktura }) {
           <tr>
             <td className=" align-top font-bold">DIČ:</td>
             <td>{faktura.dic}</td>
-          </tr>
-          <tr>
-            <td className=" align-top font-bold">Forma Dopravy:</td>
-            <td>
-              {faktura.formaDopravy ? faktura.formaDopravy.split(":")[1] : ""}
-            </td>
-          </tr>
-          <tr>
-            <td className=" align-top font-bold">Forma Úhrady:</td>
-            <td>
-              {faktura.formaUhrady ? faktura.formaUhrady.split(":")[1] : ""}
-            </td>
-          </tr>
-          <tr>
-            <td className=" align-top font-bold">Celková suma:</td>
-            <td>
-              {faktura.sumCelkem} {faktura.mena.split(":")[1]}
-            </td>
           </tr>
         </table>
       </td>

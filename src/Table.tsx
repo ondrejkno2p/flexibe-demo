@@ -7,8 +7,7 @@ function Table({ getFaktury }: { getFaktury: Faktura[] }) {
         <thead>
           <tr key={"0"} className="text-xl">
             <th className="text-left p-2">Objednávka</th>
-            <th className="text-left p-2">Kontakt</th>
-            <th className="text-left p-2">Informace</th>
+            <th className="text-left p-2">Fakturační Údaje</th>
             <th className="text-left p-2 ">Položky</th>
           </tr>
         </thead>
