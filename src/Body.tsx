@@ -3,7 +3,9 @@ import type { ObjednavkaPrijata } from "./types";
 import Paginator from "./Paginator";
 import Table from "./Table";
 function Body() {
-  const [getObjednavkyPrijate, setObjednavkyPrijate] = useState<ObjednavkaPrijata[]>([]);
+  const [getObjednavkyPrijate, setObjednavkyPrijate] = useState<
+    ObjednavkaPrijata[]
+  >([]);
   const [getParams, setParams] = useState<{
     start: number;
     limit: number;
@@ -50,7 +52,7 @@ function Body() {
         setNavigating(false);
       });
   };
-  
+
   useEffect(() => {
     if (!isClient) {
       setClient(true);

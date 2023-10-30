@@ -69,19 +69,18 @@ function Paginator({
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
-          <button
-            className="btn-primary mx-2 w-64 whitespace-nowrap"
-            disabled={getParams.query.length==0}
-            onClick={() => {
-              setLabel(null);
+        <button
+          className="btn-primary mx-2 w-64 whitespace-nowrap"
+          disabled={getParams.query.length == 0}
+          onClick={() => {
+            updatePage({ start: 0, query: "" }, () => {
               setInput("");
-              updatePage({ start: 0, query: "" }, () => {
-                setInput("");
-              });
-            }}
-          >
-            Zrušit Filtr
-          </button>
+              setLabel(null);
+            });
+          }}
+        >
+          Zrušit Filtr
+        </button>
       </div>
       <div className="flex items-center">
         <button

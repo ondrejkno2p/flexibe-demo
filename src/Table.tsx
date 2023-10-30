@@ -1,6 +1,10 @@
 import type { ObjednavkaPrijata } from "./types";
 import Row from "./Row";
-function Table({ objednavkyPrijate }: { objednavkyPrijate: ObjednavkaPrijata[] }) {
+function Table({
+  objednavkyPrijate,
+}: {
+  objednavkyPrijate: ObjednavkaPrijata[];
+}) {
   return (
     <div className="border-solid border-2 border-gray-300 rounded-md p-0 rounded-b-none w-full">
       <table className="table-auto md:table-fixed  w-full overflow-x-scroll max-w-7xl min-w-fit">

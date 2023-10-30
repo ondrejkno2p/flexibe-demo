@@ -37,7 +37,9 @@ function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
                 Forma Dopravy:
               </td>
               <td>
-                {objednavkaPrijata.formaDopravy ? objednavkaPrijata.formaDopravy.split(":")[1] : ""}
+                {objednavkaPrijata.formaDopravy
+                  ? objednavkaPrijata.formaDopravy.split(":")[1]
+                  : ""}
               </td>
             </tr>
             <tr>
@@ -45,13 +47,16 @@ function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
                 Forma Úhrady:
               </td>
               <td>
-                {objednavkaPrijata.formaUhrady ? objednavkaPrijata.formaUhrady.split(":")[1] : ""}
+                {objednavkaPrijata.formaUhrady
+                  ? objednavkaPrijata.formaUhrady.split(":")[1]
+                  : ""}
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">Celková suma:</td>
               <td>
-                {objednavkaPrijata.sumCelkem} {objednavkaPrijata.mena.split(":")[1]}
+                {objednavkaPrijata.sumCelkem}{" "}
+                {objednavkaPrijata.mena.split(":")[1]}
               </td>
             </tr>
           </tbody>
@@ -108,7 +113,8 @@ function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
         </table>
       </td>
       <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none overflow-xs">
-        {(!objednavkaPrijata.polozky || objednavkaPrijata.polozky.length === 0) && (
+        {(!objednavkaPrijata.polozky ||
+          objednavkaPrijata.polozky.length === 0) && (
           <p className="text-left w-fit font-bold text-red-500 text-xl">
             Bez položek
           </p>
