@@ -122,13 +122,14 @@ function Paginator({
           className="btn-primary rounded-l-none w-10 h-10"
           disabled={rowCount <= getParams.start + getParams.limit}
           onClick={() => {
-            const endPage =
+            const endPage = Number(
               rowCount > 0
                 ? Math.floor(rowCount / getParams.limit) * getParams.limit
-                : 0;
+                : 0,
+            );
             updatePage({
               start:
-                endPage === rowCount
+                Number(endPage) === Number(rowCount)
                   ? Math.max(0, endPage - getParams.limit)
                   : endPage,
             });
