@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -9,34 +18,46 @@ app.listen(3001);
 app.use((req, res, next) => {
     next();
 });
-const getFaktura = (fakturaFull) => {
-    const faAdresa = !(fakturaFull.faUlice === "" &&
-        fakturaFull.faMesto === "" &&
-        fakturaFull.faPsc === "" &&
-        fakturaFull.faStat === "");
+const getFakturaID = (vazby) => {
+    if (vazby.length == 0) {
+        return null;
+    }
+    for (let i = 0; i < vazby.length; i++) {
+        const vazba = vazby[i];
+        if (vazba["b@ref"].search("/faktura-vydana/") > -1) {
+            return vazba['b@ref'].split('/').slice(-1)[0].replace('.json', '');
+        }
+    }
+    return null;
+};
+const getobjednavkaPrijata = (objednavkaPrijata) => {
+    const faAdresa = !(objednavkaPrijata.faUlice === "" &&
+        objednavkaPrijata.faMesto === "" &&
+        objednavkaPrijata.faPsc === "" &&
+        objednavkaPrijata.faStat === "");
     const faktura = {
-        id: fakturaFull.id,
-        uzivatel: fakturaFull["uzivatel@showAs"],
-        kod: fakturaFull.kod,
-        kontaktJmeno: fakturaFull.kontaktJmeno,
-        dic: fakturaFull.dic,
-        ic: fakturaFull.ic,
-        mesto: faAdresa ? fakturaFull.faMesto : fakturaFull.mesto,
-        psc: faAdresa ? fakturaFull.faPsc : fakturaFull.psc,
-        ulice: faAdresa ? fakturaFull.faUlice : fakturaFull.ulice,
-        stat: faAdresa ? fakturaFull["faStat@showAs"] : fakturaFull["stat@showAs"],
-        formaDopravy: fakturaFull["formaDopravy@showAs"],
-        sumCelkem: fakturaFull.sumCelkem,
-        mena: fakturaFull.mena,
-        stavUzivK: fakturaFull["stavUzivK@showAs"],
-        bezPolozek: fakturaFull.bezPolozek,
-        polozky: fakturaFull.polozkyObchDokladu
-            ? fakturaFull.polozkyObchDokladu.map((polozka) => {
+        id: objednavkaPrijata.id,
+        uzivatel: objednavkaPrijata["uzivatel@showAs"],
+        kod: objednavkaPrijata.kod,
+        kontaktJmeno: objednavkaPrijata.kontaktJmeno,
+        dic: objednavkaPrijata.dic,
+        ic: objednavkaPrijata.ic,
+        mesto: faAdresa ? objednavkaPrijata.faMesto : objednavkaPrijata.mesto,
+        psc: faAdresa ? objednavkaPrijata.faPsc : objednavkaPrijata.psc,
+        ulice: faAdresa ? objednavkaPrijata.faUlice : objednavkaPrijata.ulice,
+        stat: faAdresa ? objednavkaPrijata["faStat@showAs"] : objednavkaPrijata["stat@showAs"],
+        formaDopravy: objednavkaPrijata["formaDopravy@showAs"],
+        sumCelkem: objednavkaPrijata.sumCelkem,
+        mena: objednavkaPrijata.mena,
+        stavUzivK: objednavkaPrijata["stavUzivK@showAs"],
+        bezPolozek: objednavkaPrijata.bezPolozek,
+        polozky: objednavkaPrijata.polozkyObchDokladu
+            ? objednavkaPrijata.polozkyObchDokladu.map((polozka) => {
                 return { id: polozka.id, nazev: polozka.nazev, kod: polozka.kod };
             })
             : undefined,
-        formaUhrady: fakturaFull["formaUhradyCis@showAs"],
-        fakturaVydana: fakturaFull.vazby.length > 0 ? String(fakturaFull.vazby[0]['b@ref']).split('/').slice(-1)[0].replace('.json', '') : null
+        formaUhrady: objednavkaPrijata["formaUhradyCis@showAs"],
+        fakturaVydana: getFakturaID(objednavkaPrijata.vazby)
     };
     return faktura;
 };
@@ -62,8 +83,31 @@ const detail = [
     "bezPolozek",
     "formaUhradyCis",
     "polozkyObchDokladu(nazev,id,kod)",
+    "vazby"
 ];
-app.get("/api", (request, response) => {
+const polozkaDetail = [
+    "nazev",
+    "id",
+    "kod",
+];
+const getFilterByPolozkyObchDokladu = (q) => __awaiter(void 0, void 0, void 0, function* () {
+    const params = new URLSearchParams();
+    params.append("detail", "custom:" + polozkaDetail.toString() + ",doklObch(id)");
+    params.append("includes", "objednavka-prijata-polozka/doklObch");
+    params.append("limit", "0");
+    const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/' +
+        q
+        + '.json?' +
+        params.toString();
+    let ids = [];
+    const res = yield fetch(url);
+    const body = yield res.json();
+    ids = body.winstrom["objednavka-prijata-polozka"].map((v) => {
+        return v.doklObch[0].id;
+    });
+    return '(id in (' + ids.toString() + '))';
+});
+app.get("/api", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const params = new URLSearchParams();
     if (request.query.start !== undefined) {
         params.append("start", String(request.query.start));
@@ -80,9 +124,13 @@ app.get("/api", (request, response) => {
     params.append("add-row-count", "true");
     params.append("relations", "vazby");
     params.append("detail", "custom:" + detail.toString());
+    let q = request.query.q;
+    if (q !== undefined && q.startsWith('polozkyObchDokladu:')) {
+        q = yield getFilterByPolozkyObchDokladu(q.split('polozkyObchDokladu:')[1]);
+    }
     const url = request.query.q !== undefined
         ? "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
-            request.query.q +
+            q +
             ".json?" +
             params.toString()
         : "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
@@ -92,9 +140,8 @@ app.get("/api", (request, response) => {
         return res.json();
     })
         .then((body) => {
-        console.log(body.winstrom["objednavka-prijata"].map((value) => { return value.vazby; }));
-        const faktury = body.winstrom["objednavka-prijata"].map((fakturaFull) => {
-            return getFaktura(fakturaFull);
+        const faktury = body.winstrom["objednavka-prijata"].map((objednavkaPrijata) => {
+            return getobjednavkaPrijata(objednavkaPrijata);
         });
         response.setHeader("cache-control", "max-age=60");
         response.json({ faktury: faktury, rowCount: body.winstrom["@rowCount"] });
@@ -103,27 +150,7 @@ app.get("/api", (request, response) => {
         response.status(500).send();
         console.log(error);
     });
-});
-app.get("/api/:id", (request, response) => {
-    const url = "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
-        request.params.id +
-        ".json";
-    fetch(url)
-        .then((res) => {
-        return res.json();
-    })
-        .then((body) => {
-        const faktura = body.winstrom["objednavka-prijata"].map((fakturaFull) => {
-            return getFaktura(fakturaFull);
-        });
-        response.setHeader("cache-control", "max-age=60");
-        response.json(faktura[0]);
-    })
-        .catch((error) => {
-        response.status(500).send();
-        console.log(error);
-    });
-});
+}));
 app.get("/api/pdf/:id.pdf", (request, response) => {
     const url = "https://demo.flexibee.eu/c/demo/faktura-vydana/" +
         request.params.id +

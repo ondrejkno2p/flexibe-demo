@@ -29,6 +29,7 @@ const search = [
   },
   { value: "(sumCelkem <= %)", name: "Suma pod" },
   { value: "(sumCelkem >= %)", name: "Suma nad" },
+  { value: "polozkyObchDokladu:(kod like similar '%' or nazev like similar '%')", name: "Položky"}
 ];
 
 function LabelPicker({
