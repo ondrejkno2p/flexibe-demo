@@ -1,43 +1,43 @@
-import type { Faktura } from "./types";
+import type { ObjednavkaPrijata } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 
-function Row({ faktura }: { faktura: Faktura }) {
+function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
   return (
     <tr
-      key={faktura.id}
+      key={objednavkaPrijata.id}
       className="border-2 border-solid border-gray-300 odd:bg-gray-100 even:bg-gray-50 hover:bg-white"
     >
       <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
         <table className="w-full">
           <caption className="text-left text-xl font-bold">
-            {(faktura.fakturaVydana && (
+            {(objednavkaPrijata.fakturaVydana && (
               <a
-                href={"/api/pdf/" + faktura.fakturaVydana + ".pdf"}
+                href={"/api/pdf/" + objednavkaPrijata.fakturaVydana + ".pdf"}
                 className=""
               >
-                {faktura.kod} <FontAwesomeIcon icon={faFilePdf} />
+                {objednavkaPrijata.kod} <FontAwesomeIcon icon={faFilePdf} />
               </a>
-            )) || <p>{faktura.kod}</p>}
+            )) || <p>{objednavkaPrijata.kod}</p>}
           </caption>
           <tbody>
             <tr>
               <td className=" align-top font-bold">Stav:</td>
               <td className="w-full">
-                {faktura.stavUzivK}
+                {objednavkaPrijata.stavUzivK}
                 <br />
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">Uživatel:</td>
-              <td>{faktura.uzivatel}</td>
+              <td>{objednavkaPrijata.uzivatel}</td>
             </tr>
             <tr>
               <td className=" align-top font-bold whitespace-nowrap">
                 Forma Dopravy:
               </td>
               <td>
-                {faktura.formaDopravy ? faktura.formaDopravy.split(":")[1] : ""}
+                {objednavkaPrijata.formaDopravy ? objednavkaPrijata.formaDopravy.split(":")[1] : ""}
               </td>
             </tr>
             <tr>
@@ -45,13 +45,13 @@ function Row({ faktura }: { faktura: Faktura }) {
                 Forma Úhrady:
               </td>
               <td>
-                {faktura.formaUhrady ? faktura.formaUhrady.split(":")[1] : ""}
+                {objednavkaPrijata.formaUhrady ? objednavkaPrijata.formaUhrady.split(":")[1] : ""}
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">Celková suma:</td>
               <td>
-                {faktura.sumCelkem} {faktura.mena.split(":")[1]}
+                {objednavkaPrijata.sumCelkem} {objednavkaPrijata.mena.split(":")[1]}
               </td>
             </tr>
           </tbody>
@@ -64,59 +64,59 @@ function Row({ faktura }: { faktura: Faktura }) {
             <tr>
               <td className=" align-top font-bold">Jméno:</td>
               <td>
-                {faktura.kontaktJmeno}
+                {objednavkaPrijata.kontaktJmeno}
                 <br />
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">Ulice:</td>
               <td>
-                {faktura.ulice}
+                {objednavkaPrijata.ulice}
                 <br />
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">Město:</td>
               <td>
-                {faktura.mesto}
+                {objednavkaPrijata.mesto}
                 <br />
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">PSČ:</td>
               <td>
-                {faktura.psc}
+                {objednavkaPrijata.psc}
                 <br />
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">Stát:</td>
               <td>
-                {faktura.stat}
+                {objednavkaPrijata.stat}
                 <br />
               </td>
             </tr>
             <tr>
               <td className=" align-top font-bold">IČO:</td>
-              <td>{faktura.ic}</td>
+              <td>{objednavkaPrijata.ic}</td>
             </tr>
             <tr>
               <td className=" align-top font-bold">DIČ:</td>
-              <td>{faktura.dic}</td>
+              <td>{objednavkaPrijata.dic}</td>
             </tr>
           </tbody>
         </table>
       </td>
       <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none overflow-xs">
-        {(!faktura.polozky || faktura.polozky.length === 0) && (
+        {(!objednavkaPrijata.polozky || objednavkaPrijata.polozky.length === 0) && (
           <p className="text-left w-fit font-bold text-red-500 text-xl">
             Bez položek
           </p>
         )}
 
         <ol className="w-full">
-          {faktura.polozky &&
-            faktura.polozky.map((polozka, index) => {
+          {objednavkaPrijata.polozky &&
+            objednavkaPrijata.polozky.map((polozka, index) => {
               return (
                 <li
                   key={index}

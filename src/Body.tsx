@@ -1,39 +1,34 @@
 import { useEffect, useState } from "react";
-import type { Faktura } from "./types";
+import type { ObjednavkaPrijata } from "./types";
 import Paginator from "./Paginator";
 import Table from "./Table";
 function Body() {
-  const [getFaktury, setFaktury] = useState<Faktura[]>([]);
+  const [getObjednavkyPrijate, setObjednavkyPrijate] = useState<ObjednavkaPrijata[]>([]);
   const [getParams, setParams] = useState<{
     start: number;
     limit: number;
-    q: string;
+    query: string;
   }>({
     start: 0,
     limit: 8,
-    q: "",
+    query: "",
   });
   const [isClient, setClient] = useState(false);
   const [rowCount, setRowCount] = useState(0);
   const [getNavigating, setNavigating] = useState(false);
   const updatePage = (
-    { limit, start, q }: { limit?: number; start?: number; q?: string },
+    { limit, start, query }: { limit?: number; start?: number; query?: string },
     callback?: () => void,
   ) => {
     setNavigating(true);
-    const params = new URLSearchParams();
-    params.append(
-      "limit",
-      limit !== undefined ? String(limit) : String(getParams.limit),
-    );
-    params.append(
-      "start",
-      start !== undefined ? String(start) : String(getParams.start),
-    );
-    if (q !== undefined && q.length > 0) {
-      params.append("q", q);
-    } else if (q === undefined && getParams.q.length > 0) {
-      params.append("q", getParams.q);
+    const params = new URLSearchParams([
+      ["limit", limit !== undefined ? String(limit) : String(getParams.limit)],
+      ["start", start !== undefined ? String(start) : String(getParams.start)],
+    ]);
+    if (query !== undefined && query.length > 0) {
+      params.append("query", query);
+    } else if (query === undefined && getParams.query.length > 0) {
+      params.append("query", getParams.query);
     }
     const url = "/api?" + params.toString();
     fetch(url)
@@ -41,12 +36,12 @@ function Body() {
         return res.json();
       })
       .then((body) => {
-        setFaktury(body.faktury);
+        setObjednavkyPrijate(body.objednavkyPrijate);
         setRowCount(body.rowCount);
         setParams({
           limit: limit !== undefined ? limit : getParams.limit,
           start: start !== undefined ? start : getParams.start,
-          q: q !== undefined ? q : getParams.q,
+          query: query !== undefined ? query : getParams.query,
         });
         if (callback) callback();
         setNavigating(false);
@@ -55,13 +50,11 @@ function Body() {
         setNavigating(false);
       });
   };
+  
   useEffect(() => {
     if (!isClient) {
       setClient(true);
-    }
-  }, [isClient]);
-  useEffect(() => {
-    if (isClient) {
+    } else {
       updatePage({ start: 0 });
     }
   }, [isClient]);
@@ -77,7 +70,7 @@ function Body() {
         {getNavigating && (
           <div className="absolute block w-full bg-white z-50 opacity-40 top-0  bottom-0"></div>
         )}
-        <Table getFaktury={getFaktury} />
+        <Table objednavkyPrijate={getObjednavkyPrijate} />
       </div>
     </div>
   );

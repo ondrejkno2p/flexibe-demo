@@ -18,16 +18,16 @@ function Paginator({
     {
       limit,
       start,
-      q,
+      query,
     }: {
       limit?: number | undefined;
       start?: number | undefined;
-      q?: string | undefined;
+      query?: string | undefined;
       tag?: string | undefined;
     },
     callback?: () => void,
   ) => void;
-  getParams: { limit: number; start: number; q: string };
+  getParams: { limit: number; start: number; query: string };
   rowCount: number;
 }) {
   const [input, setInput] = useState("");
@@ -47,7 +47,7 @@ function Paginator({
             if (event.key === "Enter") {
               updatePage({
                 start: 0,
-                q: label ? label.value.replace(/%/g, input) : input,
+                query: label ? label.value.replace(/%/g, input) : input,
               });
             }
           }}
@@ -62,26 +62,26 @@ function Paginator({
             if (input.length > 0) {
               updatePage({
                 start: 0,
-                q: label ? label.value.replace(/%/g, input) : input,
+                query: label ? label.value.replace(/%/g, input) : input,
               });
             }
           }}
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
-        <button
-          className="btn-primary mx-2 w-64 whitespace-nowrap"
-          disabled={getParams.q.length == 0}
-          onClick={() => {
-            setLabel(null);
-            setInput("");
-            updatePage({ start: 0, q: "" }, () => {
+          <button
+            className="btn-primary mx-2 w-64 whitespace-nowrap"
+            disabled={getParams.query.length==0}
+            onClick={() => {
+              setLabel(null);
               setInput("");
-            });
-          }}
-        >
-          Zrušit Filtr
-        </button>
+              updatePage({ start: 0, query: "" }, () => {
+                setInput("");
+              });
+            }}
+          >
+            Zrušit Filtr
+          </button>
       </div>
       <div className="flex items-center">
         <button
@@ -117,11 +117,10 @@ function Paginator({
           className="btn-primary rounded-l-none w-10 h-10"
           disabled={rowCount <= getParams.start + getParams.limit}
           onClick={() => {
-            const endPage = Number(
+            const endPage =
               rowCount > 0
                 ? Math.floor(rowCount / getParams.limit) * getParams.limit
-                : 0,
-            );
+                : 0;
             updatePage({
               start:
                 Number(endPage) === Number(rowCount)

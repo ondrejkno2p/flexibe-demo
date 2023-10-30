@@ -1,4 +1,4 @@
-export type Faktura = {
+export type ObjednavkaPrijata = {
   id: string;
   uzivatel: string;
   kod: string;

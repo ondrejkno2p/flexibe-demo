@@ -1,5 +1,5 @@
 import express from "express";
-import type { Faktura } from "../src/types";
+import type { ObjednavkaPrijata } from "../src/types";
 
 const app = express();
 app.listen(3001);
@@ -8,7 +8,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const getFakturaID = (vazby: { "b@ref": string }[]) => {
+const getFakturaId = (vazby: { "b@ref": string }[]) => {
   if (vazby.length == 0) {
     return null;
   }
@@ -21,40 +21,40 @@ const getFakturaID = (vazby: { "b@ref": string }[]) => {
   return null;
 };
 
-const getobjednavkaPrijata = (objednavkaPrijata: any) => {
+const getobjednavkaPrijata = (objednavkaPrijataData: any) => {
   const faAdresa = !(
-    objednavkaPrijata.faUlice === "" &&
-    objednavkaPrijata.faMesto === "" &&
-    objednavkaPrijata.faPsc === "" &&
-    objednavkaPrijata.faStat === ""
+    objednavkaPrijataData.faUlice === "" &&
+    objednavkaPrijataData.faMesto === "" &&
+    objednavkaPrijataData.faPsc === "" &&
+    objednavkaPrijataData.faStat === ""
   );
-  const faktura: Faktura = {
-    id: objednavkaPrijata.id,
-    uzivatel: objednavkaPrijata["uzivatel@showAs"],
-    kod: objednavkaPrijata.kod,
-    kontaktJmeno: objednavkaPrijata.kontaktJmeno,
-    dic: objednavkaPrijata.dic,
-    ic: objednavkaPrijata.ic,
-    mesto: faAdresa ? objednavkaPrijata.faMesto : objednavkaPrijata.mesto,
-    psc: faAdresa ? objednavkaPrijata.faPsc : objednavkaPrijata.psc,
-    ulice: faAdresa ? objednavkaPrijata.faUlice : objednavkaPrijata.ulice,
+  const objednavkaPrijata: ObjednavkaPrijata = {
+    id: objednavkaPrijataData.id,
+    uzivatel: objednavkaPrijataData["uzivatel@showAs"],
+    kod: objednavkaPrijataData.kod,
+    kontaktJmeno: objednavkaPrijataData.kontaktJmeno,
+    dic: objednavkaPrijataData.dic,
+    ic: objednavkaPrijataData.ic,
+    mesto: faAdresa ? objednavkaPrijataData.faMesto : objednavkaPrijataData.mesto,
+    psc: faAdresa ? objednavkaPrijataData.faPsc : objednavkaPrijataData.psc,
+    ulice: faAdresa ? objednavkaPrijataData.faUlice : objednavkaPrijataData.ulice,
     stat: faAdresa
-      ? objednavkaPrijata["faStat@showAs"]
-      : objednavkaPrijata["stat@showAs"],
-    formaDopravy: objednavkaPrijata["formaDopravy@showAs"],
-    sumCelkem: objednavkaPrijata.sumCelkem,
-    mena: objednavkaPrijata.mena,
-    stavUzivK: objednavkaPrijata["stavUzivK@showAs"],
-    bezPolozek: objednavkaPrijata.bezPolozek,
-    polozky: objednavkaPrijata.polozkyObchDokladu
-      ? objednavkaPrijata.polozkyObchDokladu.map((polozka: any) => {
+      ? objednavkaPrijataData["faStat@showAs"]
+      : objednavkaPrijataData["stat@showAs"],
+    formaDopravy: objednavkaPrijataData["formaDopravy@showAs"],
+    sumCelkem: objednavkaPrijataData.sumCelkem,
+    mena: objednavkaPrijataData.mena,
+    stavUzivK: objednavkaPrijataData["stavUzivK@showAs"],
+    bezPolozek: objednavkaPrijataData.bezPolozek,
+    polozky: objednavkaPrijataData.polozkyObchDokladu
+      ? objednavkaPrijataData.polozkyObchDokladu.map((polozka: any) => {
           return { id: polozka.id, nazev: polozka.nazev, kod: polozka.kod };
         })
       : undefined,
-    formaUhrady: objednavkaPrijata["formaUhradyCis@showAs"],
-    fakturaVydana: getFakturaID(objednavkaPrijata.vazby),
+    formaUhrady: objednavkaPrijataData["formaUhradyCis@showAs"],
+    fakturaVydana: getFakturaId(objednavkaPrijataData.vazby),
   };
-  return faktura;
+  return objednavkaPrijata;
 };
 
 const detail = [
@@ -84,8 +84,7 @@ const detail = [
 
 const polozkaDetail = ["nazev", "id", "kod"];
 
-const getFilterByPolozkyObchDokladu = async (q: string) => {
-  console.log(q);
+const getFilterByPolozkyObchDokladu = async (query: string) => {
   const params = new URLSearchParams();
   params.append(
     "detail",
@@ -95,14 +94,12 @@ const getFilterByPolozkyObchDokladu = async (q: string) => {
   params.append("limit", "0");
   const url =
     "https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/" +
-    q +
+    query +
     ".json?" +
     params.toString();
-  console.log(url);
   let ids: number[] = [];
   const res = await fetch(url);
   const body = await res.json();
-  console.log(body);
   ids = body.winstrom["objednavka-prijata-polozka"].map((v: any) => {
     return v.doklObch[0].id as number;
   });
@@ -124,15 +121,14 @@ app.get("/api", async (request, response) => {
   params.append("add-row-count", "true");
   params.append("relations", "vazby");
   params.append("detail", "custom:" + detail.toString());
-  let q = request.query.q as string | undefined;
-  if (q !== undefined && q.startsWith("polozkyObchDokladu:")) {
-    q = await getFilterByPolozkyObchDokladu(q.split("polozkyObchDokladu:")[1]);
+  let query = request.query.query as string | undefined;
+  if (query !== undefined && query.startsWith("polozkyObchDokladu:")) {
+    query = await getFilterByPolozkyObchDokladu(query.split("polozkyObchDokladu:")[1]);
   }
   const url =
-    request.query.q !== undefined
+    query !== undefined
       ? "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
-        q +
-        ".json?" +
+      query + ".json?" +
         params.toString()
       : "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
         params.toString();
@@ -141,14 +137,13 @@ app.get("/api", async (request, response) => {
       return res.json();
     })
     .then((body) => {
-      // console.log(body.winstrom["objednavka-prijata"].map((value:any)=>{return value.vazby}))
-      const faktury = body.winstrom["objednavka-prijata"].map(
+      const objednavkyPrijate = body.winstrom["objednavka-prijata"].map(
         (objednavkaPrijata: any) => {
           return getobjednavkaPrijata(objednavkaPrijata);
         },
       );
       response.setHeader("cache-control", "max-age=60");
-      response.json({ faktury: faktury, rowCount: body.winstrom["@rowCount"] });
+      response.json({ objednavkyPrijate: objednavkyPrijate, rowCount: body.winstrom["@rowCount"] });
     })
     .catch((error) => {
       response.status(500).send();
