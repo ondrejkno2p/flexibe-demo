@@ -69,7 +69,7 @@ function Paginator({
         >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
-        {(getParams.q && (
+        {(getParams.q.length > 0 && (
           <button
             className="btn-primary mx-2 w-64 whitespace-nowrap"
             onClick={() => {

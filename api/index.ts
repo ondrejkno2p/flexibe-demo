@@ -8,18 +8,18 @@ app.use((req, res, next) => {
   next();
 });
 
-const getFakturaID = (vazby:{"b@ref":string}[])=>{
-  if (vazby.length==0){
-    return null
+const getFakturaID = (vazby: { "b@ref": string }[]) => {
+  if (vazby.length == 0) {
+    return null;
   }
   for (let i = 0; i < vazby.length; i++) {
-    const vazba = vazby[i]
-    if(vazba["b@ref"].search("/faktura-vydana/")>-1){
-      return vazba['b@ref'].split('/').slice(-1)[0].replace('.json','')
+    const vazba = vazby[i];
+    if (vazba["b@ref"].search("/faktura-vydana/") > -1) {
+      return vazba["b@ref"].split("/").slice(-1)[0].replace(".json", "");
     }
   }
-  return null
-}
+  return null;
+};
 
 const getobjednavkaPrijata = (objednavkaPrijata: any) => {
   const faAdresa = !(
@@ -38,7 +38,9 @@ const getobjednavkaPrijata = (objednavkaPrijata: any) => {
     mesto: faAdresa ? objednavkaPrijata.faMesto : objednavkaPrijata.mesto,
     psc: faAdresa ? objednavkaPrijata.faPsc : objednavkaPrijata.psc,
     ulice: faAdresa ? objednavkaPrijata.faUlice : objednavkaPrijata.ulice,
-    stat: faAdresa ? objednavkaPrijata["faStat@showAs"] : objednavkaPrijata["stat@showAs"],
+    stat: faAdresa
+      ? objednavkaPrijata["faStat@showAs"]
+      : objednavkaPrijata["stat@showAs"],
     formaDopravy: objednavkaPrijata["formaDopravy@showAs"],
     sumCelkem: objednavkaPrijata.sumCelkem,
     mena: objednavkaPrijata.mena,
@@ -50,7 +52,7 @@ const getobjednavkaPrijata = (objednavkaPrijata: any) => {
         })
       : undefined,
     formaUhrady: objednavkaPrijata["formaUhradyCis@showAs"],
-    fakturaVydana: getFakturaID(objednavkaPrijata.vazby)
+    fakturaVydana: getFakturaID(objednavkaPrijata.vazby),
   };
   return faktura;
 };
@@ -77,35 +79,35 @@ const detail = [
   "bezPolozek",
   "formaUhradyCis",
   "polozkyObchDokladu(nazev,id,kod)",
-  "vazby"
+  "vazby",
 ];
 
-const polozkaDetail = [
-  "nazev",
-  "id",
-  "kod",
-];
+const polozkaDetail = ["nazev", "id", "kod"];
 
-const getFilterByPolozkyObchDokladu = async (q:string) =>{
-  console.log(q)
+const getFilterByPolozkyObchDokladu = async (q: string) => {
+  console.log(q);
   const params = new URLSearchParams();
-  params.append("detail", "custom:" + polozkaDetail.toString()+",doklObch(id)");
+  params.append(
+    "detail",
+    "custom:" + polozkaDetail.toString() + ",doklObch(id)",
+  );
   params.append("includes", "objednavka-prijata-polozka/doklObch");
   params.append("limit", "0");
-  const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/'+
-  q
-  +'.json?'+
-  params.toString()
-  console.log(url)
-  let ids:number[]=[]
-  const res = await fetch(url)
-  const body = await res.json()
-  console.log(body)
-  ids = body.winstrom["objednavka-prijata-polozka"].map((v:any)=>{
-    return v.doklObch[0].id as number
-  })
-  return '(id in ('+ids.toString()+'))'
-}
+  const url =
+    "https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/" +
+    q +
+    ".json?" +
+    params.toString();
+  console.log(url);
+  let ids: number[] = [];
+  const res = await fetch(url);
+  const body = await res.json();
+  console.log(body);
+  ids = body.winstrom["objednavka-prijata-polozka"].map((v: any) => {
+    return v.doklObch[0].id as number;
+  });
+  return "(id in (" + ids.toString() + "))";
+};
 
 app.get("/api", async (request, response) => {
   const params = new URLSearchParams();
@@ -122,9 +124,9 @@ app.get("/api", async (request, response) => {
   params.append("add-row-count", "true");
   params.append("relations", "vazby");
   params.append("detail", "custom:" + detail.toString());
-  let q=request.query.q as string | undefined;
-  if(q!==undefined && q.startsWith('polozkyObchDokladu:')){
-    q= await getFilterByPolozkyObchDokladu(q.split('polozkyObchDokladu:')[1])
+  let q = request.query.q as string | undefined;
+  if (q !== undefined && q.startsWith("polozkyObchDokladu:")) {
+    q = await getFilterByPolozkyObchDokladu(q.split("polozkyObchDokladu:")[1]);
   }
   const url =
     request.query.q !== undefined

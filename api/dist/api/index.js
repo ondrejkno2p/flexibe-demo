@@ -25,7 +25,7 @@ const getFakturaID = (vazby) => {
     for (let i = 0; i < vazby.length; i++) {
         const vazba = vazby[i];
         if (vazba["b@ref"].search("/faktura-vydana/") > -1) {
-            return vazba['b@ref'].split('/').slice(-1)[0].replace('.json', '');
+            return vazba["b@ref"].split("/").slice(-1)[0].replace(".json", "");
         }
     }
     return null;
@@ -45,7 +45,9 @@ const getobjednavkaPrijata = (objednavkaPrijata) => {
         mesto: faAdresa ? objednavkaPrijata.faMesto : objednavkaPrijata.mesto,
         psc: faAdresa ? objednavkaPrijata.faPsc : objednavkaPrijata.psc,
         ulice: faAdresa ? objednavkaPrijata.faUlice : objednavkaPrijata.ulice,
-        stat: faAdresa ? objednavkaPrijata["faStat@showAs"] : objednavkaPrijata["stat@showAs"],
+        stat: faAdresa
+            ? objednavkaPrijata["faStat@showAs"]
+            : objednavkaPrijata["stat@showAs"],
         formaDopravy: objednavkaPrijata["formaDopravy@showAs"],
         sumCelkem: objednavkaPrijata.sumCelkem,
         mena: objednavkaPrijata.mena,
@@ -57,7 +59,7 @@ const getobjednavkaPrijata = (objednavkaPrijata) => {
             })
             : undefined,
         formaUhrady: objednavkaPrijata["formaUhradyCis@showAs"],
-        fakturaVydana: getFakturaID(objednavkaPrijata.vazby)
+        fakturaVydana: getFakturaID(objednavkaPrijata.vazby),
     };
     return faktura;
 };
@@ -83,29 +85,28 @@ const detail = [
     "bezPolozek",
     "formaUhradyCis",
     "polozkyObchDokladu(nazev,id,kod)",
-    "vazby"
+    "vazby",
 ];
-const polozkaDetail = [
-    "nazev",
-    "id",
-    "kod",
-];
+const polozkaDetail = ["nazev", "id", "kod"];
 const getFilterByPolozkyObchDokladu = (q) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(q);
     const params = new URLSearchParams();
     params.append("detail", "custom:" + polozkaDetail.toString() + ",doklObch(id)");
     params.append("includes", "objednavka-prijata-polozka/doklObch");
     params.append("limit", "0");
-    const url = 'https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/' +
-        q
-        + '.json?' +
+    const url = "https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/" +
+        q +
+        ".json?" +
         params.toString();
+    console.log(url);
     let ids = [];
     const res = yield fetch(url);
     const body = yield res.json();
+    console.log(body);
     ids = body.winstrom["objednavka-prijata-polozka"].map((v) => {
         return v.doklObch[0].id;
     });
-    return '(id in (' + ids.toString() + '))';
+    return "(id in (" + ids.toString() + "))";
 });
 app.get("/api", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     const params = new URLSearchParams();
@@ -125,21 +126,23 @@ app.get("/api", (request, response) => __awaiter(void 0, void 0, void 0, functio
     params.append("relations", "vazby");
     params.append("detail", "custom:" + detail.toString());
     let q = request.query.q;
-    if (q !== undefined && q.startsWith('polozkyObchDokladu:')) {
-        q = yield getFilterByPolozkyObchDokladu(q.split('polozkyObchDokladu:')[1]);
+    if (q !== undefined && q.startsWith("polozkyObchDokladu:")) {
+        q = yield getFilterByPolozkyObchDokladu(q.split("polozkyObchDokladu:")[1]);
     }
     const url = request.query.q !== undefined
         ? "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
             q +
             ".json?" +
             params.toString()
-        : "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
+        : "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
+            ".json?" +
             params.toString();
     fetch(url)
         .then((res) => {
         return res.json();
     })
         .then((body) => {
+        // console.log(body.winstrom["objednavka-prijata"].map((value:any)=>{return value.vazby}))
         const faktury = body.winstrom["objednavka-prijata"].map((objednavkaPrijata) => {
             return getobjednavkaPrijata(objednavkaPrijata);
         });

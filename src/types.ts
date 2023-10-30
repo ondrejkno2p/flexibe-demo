@@ -16,5 +16,5 @@ export type Faktura = {
   stavUzivK: string;
   polozky?: { kod: string; nazev: string; id: string }[];
   formaUhrady: string;
-  fakturaVydana: string | null,
+  fakturaVydana: string | null;
 };
