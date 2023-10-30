@@ -10,13 +10,17 @@ function Row({ faktura }: { faktura: Faktura }) {
     >
       <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
         <table className="w-full">
-          <caption className="text-left">
-            <a
-              href={"/api/pdf/" + faktura.id + ".pdf"}
-              className="text-xl font-bold"
-            >
-              {faktura.kod} <FontAwesomeIcon icon={faFilePdf} />
-            </a>
+          <caption className="text-left text-xl font-bold">
+            {faktura.fakturaVydana &&
+              <a
+                href={"/api/pdf/" + faktura.fakturaVydana + ".pdf"}
+                className=""
+              >
+                {faktura.kod} <FontAwesomeIcon icon={faFilePdf} />
+              </a>
+              ||
+              <p>{faktura.kod}</p>
+            }
           </caption>
           <tbody>
             <tr>

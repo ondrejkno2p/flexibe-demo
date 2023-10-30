@@ -37,6 +37,7 @@ const getFaktura = (fakturaFull: any) => {
         })
       : undefined,
     formaUhrady: fakturaFull["formaUhradyCis@showAs"],
+    fakturaVydana: fakturaFull.vazby.length>0?String(fakturaFull.vazby[0]['b@ref']).split('/').slice(-1)[0].replace('.json',''):null
   };
   return faktura;
 };
@@ -78,6 +79,8 @@ app.get("/api", (request, response) => {
     params.append("limit", String(8));
   }
   params.append("add-row-count", "true");
+  params.append("relations", "vazby");
+
   params.append("detail", "custom:" + detail.toString());
 
   const url =
@@ -93,6 +96,7 @@ app.get("/api", (request, response) => {
       return res.json();
     })
     .then((body) => {
+      console.log(body.winstrom["objednavka-prijata"].map((value:any)=>{return value.vazby}))
       const faktury = body.winstrom["objednavka-prijata"].map(
         (fakturaFull: any) => {
           return getFaktura(fakturaFull);
@@ -133,7 +137,7 @@ app.get("/api/:id", (request, response) => {
 
 app.get("/api/pdf/:id.pdf", (request, response) => {
   const url =
-    "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
+    "https://demo.flexibee.eu/c/demo/faktura-vydana/" +
     request.params.id +
     ".pdf";
   fetch(url)
