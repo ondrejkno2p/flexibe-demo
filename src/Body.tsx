@@ -41,7 +41,6 @@ function Body() {
         return res.json();
       })
       .then((body) => {
-        console.log(body);
         setFaktury(body.faktury);
         setRowCount(body.rowCount);
         setParams({

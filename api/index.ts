@@ -134,8 +134,7 @@ app.get("/api", async (request, response) => {
         q +
         ".json?" +
         params.toString()
-      : "https://demo.flexibee.eu/c/demo/objednavka-prijata/" +
-        ".json?" +
+      : "https://demo.flexibee.eu/c/demo/objednavka-prijata.json?" +
         params.toString();
   fetch(url)
     .then((res) => {
