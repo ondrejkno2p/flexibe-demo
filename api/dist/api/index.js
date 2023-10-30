@@ -44,53 +44,55 @@ const app = (0, express_1.default)();
 app.listen(3001);
 app.get("/api", (request, response) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const params = new URLSearchParams([
-      ["start", request.query.start ? String(request.query.start) : "0"],
-      ["limit", request.query.limit ? String(request.query.limit) : "8"],
-      ["add-row-count", "true"],
-      ["relations", "vazby"],
-      ["detail", "custom:" + utils_1.detail.toString()],
-    ]);
-    let query = request.query.query;
-    if (query !== undefined && query.startsWith("polozky:")) {
-      query = yield (0, utils_1.getFilterByPolozkyObchDokladu)(
-        query.split("polozky:")[1],
+    try {
+      const params = new URLSearchParams([
+        ["start", request.query.start ? String(request.query.start) : "0"],
+        ["limit", request.query.limit ? String(request.query.limit) : "8"],
+        ["add-row-count", "true"],
+        ["relations", "vazby"],
+        ["detail", "custom:" + utils_1.detail.toString()],
+      ]);
+      let query = request.query.query;
+      if (query !== undefined && query.startsWith("polozky:")) {
+        query = yield (0, utils_1.getFilterByPolozkyObchDokladu)(
+          query.split("polozky:")[1],
+        );
+      }
+      const url =
+        "https://demo.flexibee.eu/c/demo/objednavka-prijata" +
+        (query !== undefined ? "/" + query : "") +
+        ".json?" +
+        params.toString();
+      const res = yield fetch(url);
+      const body = yield res.json();
+      const objednavkyPrijate = body.winstrom["objednavka-prijata"].map(
+        (objednavkaPrijata) => {
+          return (0, utils_1.getObjednavkaPrijata)(objednavkaPrijata);
+        },
       );
-    }
-    const url =
-      "https://demo.flexibee.eu/c/demo/objednavka-prijata" +
-      (query !== undefined ? "/" + query : "") +
-      ".json?" +
-      params.toString();
-    const res = yield fetch(url);
-    if (!res.ok) {
+      response.json({
+        objednavkyPrijate: objednavkyPrijate,
+        rowCount: body.winstrom["@rowCount"],
+      });
+    } catch (error) {
       response.status(500).send();
     }
-    const body = yield res.json();
-    const objednavkyPrijate = body.winstrom["objednavka-prijata"].map(
-      (objednavkaPrijata) => {
-        return (0, utils_1.getObjednavkaPrijata)(objednavkaPrijata);
-      },
-    );
-    response.json({
-      objednavkyPrijate: objednavkyPrijate,
-      rowCount: body.winstrom["@rowCount"],
-    });
   }),
 );
 app.get("/api/pdf/:id.pdf", (request, response) =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const url =
-      "https://demo.flexibee.eu/c/demo/faktura-vydana/" +
-      request.params.id +
-      ".pdf";
-    const res = yield fetch(url);
-    if (!res.ok) {
+    try {
+      const url =
+        "https://demo.flexibee.eu/c/demo/faktura-vydana/" +
+        request.params.id +
+        ".pdf";
+      const res = yield fetch(url);
+      const body = yield res.blob();
+      const buffer = yield body.arrayBuffer();
+      response.send(Buffer.from(buffer));
+    } catch (error) {
       response.status(500).send();
     }
-    const body = yield res.blob();
-    const buffer = yield body.arrayBuffer();
-    response.send(Buffer.from(buffer));
   }),
 );
 exports.default = app;

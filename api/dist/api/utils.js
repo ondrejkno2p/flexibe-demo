@@ -61,24 +61,26 @@ const getFakturaId = (vazby) => {
     return null;
 };
 const getFilterByPolozkyObchDokladu = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const params = new URLSearchParams([
-        ["detail", "custom:doklObch(id)"],
-        ["includes", "objednavka-prijata-polozka/doklObch"],
-        ["limit", "0"],
-    ]);
-    const url = "https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/" +
-        query +
-        ".json?" +
-        params.toString();
-    const res = yield fetch(url);
-    if (!res.ok) {
+    try {
+        const params = new URLSearchParams([
+            ["detail", "custom:doklObch(id)"],
+            ["includes", "objednavka-prijata-polozka/doklObch"],
+            ["limit", "0"],
+        ]);
+        const url = "https://demo.flexibee.eu/c/demo/objednavka-prijata-polozka/" +
+            query +
+            ".json?" +
+            params.toString();
+        const res = yield fetch(url);
+        const body = yield res.json();
+        const ids = body.winstrom["objednavka-prijata-polozka"].map((v) => {
+            return v.doklObch[0].id;
+        });
+        return "(id in (" + ids.toString() + "))";
+    }
+    catch (error) {
         return undefined;
     }
-    const body = yield res.json();
-    const ids = body.winstrom["objednavka-prijata-polozka"].map((v) => {
-        return v.doklObch[0].id;
-    });
-    return "(id in (" + ids.toString() + "))";
 });
 exports.getFilterByPolozkyObchDokladu = getFilterByPolozkyObchDokladu;
 exports.detail = [
