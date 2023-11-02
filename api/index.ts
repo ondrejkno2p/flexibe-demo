@@ -48,7 +48,7 @@ app.get("/api/pdf/:id.pdf", async (request, response) => {
     const url =
       "https://demo.flexibee.eu/c/demo/faktura-vydana/" +
       request.params.id +
-      ".pdf";
+      ".pdf?report-name=fakturaKB";
     const res = await fetch(url);
     const body = await res.blob();
     const buffer = await body.arrayBuffer();
