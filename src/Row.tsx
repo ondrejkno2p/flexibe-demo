@@ -53,6 +53,21 @@ function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
               </td>
             </tr>
             <tr>
+              <td className=" align-top font-bold whitespace-nowrap">
+                Faktura:
+              </td>
+              <td>
+              {(objednavkaPrijata.fakturaVydana && (
+              <a
+                href={"/api/pdf/" + objednavkaPrijata.fakturaVydana + ".pdf"}
+                className="underline"
+              >
+                Stáhout fakturu <FontAwesomeIcon icon={faFilePdf} />
+              </a>
+            )) || <p>Není přiložena</p>}
+              </td>
+            </tr>
+            <tr>
               <td className=" align-top font-bold">Celková suma:</td>
               <td>
                 {objednavkaPrijata.sumCelkem}{" "}
