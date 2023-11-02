@@ -11,14 +11,7 @@ function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
       <td className="p-2 align-top border-r-2 border-solid border-gray-300 last:border-none">
         <table className="w-full">
           <caption className="text-left text-xl font-bold">
-            {(objednavkaPrijata.fakturaVydana && (
-              <a
-                href={"/api/pdf/" + objednavkaPrijata.fakturaVydana + ".pdf"}
-                className=""
-              >
-                {objednavkaPrijata.kod} <FontAwesomeIcon icon={faFilePdf} />
-              </a>
-            )) || <p>{objednavkaPrijata.kod}</p>}
+            {objednavkaPrijata.kod}
           </caption>
           <tbody>
             <tr>
@@ -59,7 +52,8 @@ function Row({ objednavkaPrijata }: { objednavkaPrijata: ObjednavkaPrijata }) {
               <td>
               {(objednavkaPrijata.fakturaVydana && (
               <a
-                href={"/api/pdf/" + objednavkaPrijata.fakturaVydana + ".pdf"}
+                download={"Faktura_"+objednavkaPrijata.fakturaVydana+".pdf"}
+                href={"/api/pdf/" + objednavkaPrijata.fakturaVydana +".pdf"}
                 className="underline"
               >
                 Stáhout fakturu <FontAwesomeIcon icon={faFilePdf} />
