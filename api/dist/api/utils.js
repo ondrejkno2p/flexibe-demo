@@ -54,6 +54,9 @@ const getFakturaId = (vazby) => {
     }
     for (let i = 0; i < vazby.length; i++) {
         const vazba = vazby[i];
+        if (vazba["a@ref"].search("/faktura-vydana/") > -1) {
+            return vazba["a@ref"].split("/").slice(-1)[0].replace(".json", "");
+        }
         if (vazba["b@ref"].search("/faktura-vydana/") > -1) {
             return vazba["b@ref"].split("/").slice(-1)[0].replace(".json", "");
         }

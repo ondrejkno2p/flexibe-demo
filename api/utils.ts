@@ -40,12 +40,15 @@ export const getObjednavkaPrijata = (objednavkaPrijataData: any) => {
   return objednavkaPrijata;
 };
 
-const getFakturaId = (vazby: { "b@ref": string }[]) => {
+const getFakturaId = (vazby: { "b@ref": string; "a@ref": string }[]) => {
   if (vazby.length == 0) {
     return null;
   }
   for (let i = 0; i < vazby.length; i++) {
     const vazba = vazby[i];
+    if (vazba["a@ref"].search("/faktura-vydana/") > -1) {
+      return vazba["a@ref"].split("/").slice(-1)[0].replace(".json", "");
+    }
     if (vazba["b@ref"].search("/faktura-vydana/") > -1) {
       return vazba["b@ref"].split("/").slice(-1)[0].replace(".json", "");
     }
