@@ -9,6 +9,11 @@ const app = express();
 
 app.listen(3001);
 
+app.use((req, res, next) => {
+  console.log('Time:', Date.now())
+  next()
+})
+
 app.get("/api", async (request, response) => {
   try {
     const params = new URLSearchParams([

@@ -16,6 +16,10 @@ const express_1 = __importDefault(require("express"));
 const utils_1 = require("./utils");
 const app = (0, express_1.default)();
 app.listen(3001);
+app.use((req, res, next) => {
+    console.log('Time:', Date.now());
+    next();
+});
 app.get("/api", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const params = new URLSearchParams([
